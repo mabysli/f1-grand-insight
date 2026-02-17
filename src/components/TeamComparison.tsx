@@ -1,0 +1,142 @@
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
+import { type Team } from "@/data/f1-data";
+import { Trophy, Medal, TrendingUp } from "lucide-react";
+
+interface TeamComparisonProps {
+  teams: Team[];
+}
+
+const TeamComparison = ({ teams }: TeamComparisonProps) => {
+  const sorted = [...teams].sort((a, b) => b.points - a.points);
+
+  const chartData = sorted.map((t) => ({
+    name: t.name.replace(" Racing", ""),
+    points: t.points,
+    color: t.color,
+  }));
+
+  return (
+    <div className="space-y-4">
+      <h2 className="font-racing text-lg tracking-wide text-foreground">
+        Comparação de Equipes
+      </h2>
+
+      {/* Team rankings cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {sorted.map((team, i) => (
+          <div
+            key={team.id}
+            className="rounded-xl border border-border bg-card p-4 relative overflow-hidden"
+            style={{ boxShadow: "var(--shadow-card)" }}
+          >
+            {/* Position accent */}
+            <div
+              className="absolute top-0 left-0 w-1 h-full"
+              style={{ backgroundColor: team.color }}
+            />
+
+            <div className="pl-3 space-y-3">
+              <div className="flex items-center justify-between">
+                <span
+                  className="font-racing text-2xl font-bold"
+                  style={{ color: team.color }}
+                >
+                  P{i + 1}
+                </span>
+                <span className="font-racing text-xs tracking-wider text-muted-foreground">
+                  {team.name}
+                </span>
+              </div>
+
+              <div className="font-racing text-3xl text-foreground">
+                {team.points}
+                <span className="text-xs text-muted-foreground ml-1">PTS</span>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2 text-center">
+                <div className="bg-secondary/60 rounded-md py-1.5">
+                  <Trophy className="h-3 w-3 mx-auto mb-0.5 text-[hsl(var(--f1-gold))]" />
+                  <span className="text-xs font-racing text-foreground">{team.wins}</span>
+                  <p className="text-[10px] text-muted-foreground">Vit.</p>
+                </div>
+                <div className="bg-secondary/60 rounded-md py-1.5">
+                  <Medal className="h-3 w-3 mx-auto mb-0.5 text-[hsl(var(--f1-silver))]" />
+                  <span className="text-xs font-racing text-foreground">{team.podiums}</span>
+                  <p className="text-[10px] text-muted-foreground">Pód.</p>
+                </div>
+                <div className="bg-secondary/60 rounded-md py-1.5">
+                  <TrendingUp className="h-3 w-3 mx-auto mb-0.5 text-[hsl(var(--f1-cyan))]" />
+                  <span className="text-xs font-racing text-foreground">{team.avgFinish}</span>
+                  <p className="text-[10px] text-muted-foreground">Méd.</p>
+                </div>
+              </div>
+
+              <div className="text-[10px] text-muted-foreground">
+                {team.drivers.join(" · ")}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Points bar chart */}
+      <div
+        className="rounded-xl border border-border bg-card p-5"
+        style={{ boxShadow: "var(--shadow-card)" }}
+      >
+        <h3 className="font-racing text-sm tracking-wide text-foreground mb-4">
+          Pontos Acumulados por Equipe
+        </h3>
+        <div className="h-[260px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} layout="vertical" barSize={28}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(220 15% 18%)" horizontal={false} />
+              <XAxis
+                type="number"
+                stroke="hsl(220 10% 55%)"
+                fontSize={11}
+                fontFamily="Orbitron"
+                tickLine={false}
+              />
+              <YAxis
+                type="category"
+                dataKey="name"
+                stroke="hsl(220 10% 55%)"
+                fontSize={11}
+                fontFamily="Orbitron"
+                tickLine={false}
+                width={90}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(220 18% 12%)",
+                  border: "1px solid hsl(220 15% 18%)",
+                  borderRadius: "8px",
+                  fontFamily: "Inter",
+                  fontSize: "12px",
+                  color: "hsl(0 0% 95%)",
+                }}
+              />
+              <Bar dataKey="points" name="Pontos" radius={[0, 6, 6, 0]}>
+                {chartData.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default TeamComparison;

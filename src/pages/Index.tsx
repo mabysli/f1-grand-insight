@@ -5,6 +5,8 @@ import StatsCards from "@/components/StatsCards";
 import DriverStandings from "@/components/DriverStandings";
 import PointsChart from "@/components/PointsChart";
 import CircuitComparison from "@/components/CircuitComparison";
+import CircuitDetail from "@/components/CircuitDetail";
+import TeamComparison from "@/components/TeamComparison";
 import RaceResults from "@/components/RaceResults";
 import { getSeasonYears, getSeasonData } from "@/data/f1-data";
 
@@ -47,6 +49,13 @@ const Index = () => {
             selectedCircuit={selectedCircuit}
           />
         </div>
+
+        <CircuitDetail
+          circuits={season.circuits}
+          selectedCircuit={selectedCircuit}
+        />
+
+        <TeamComparison teams={season.teams} />
 
         <DriverStandings
           drivers={season.drivers}

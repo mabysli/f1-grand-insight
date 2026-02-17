@@ -11,6 +11,12 @@ export interface Driver {
   bestLap: string;
 }
 
+export interface SectorTime {
+  sector: number;
+  time: string;
+  driver: string;
+}
+
 export interface Circuit {
   id: string;
   name: string;
@@ -18,6 +24,18 @@ export interface Circuit {
   laps: number;
   length: string;
   fastestLap: string;
+  sectors: SectorTime[];
+}
+
+export interface Team {
+  id: string;
+  name: string;
+  color: string;
+  points: number;
+  wins: number;
+  podiums: number;
+  drivers: string[];
+  avgFinish: number;
 }
 
 export interface RaceResult {
@@ -34,6 +52,7 @@ export interface SeasonData {
   drivers: Driver[];
   circuits: Circuit[];
   results: RaceResult[];
+  teams: Team[];
   pointsProgression: { race: string; [driver: string]: number | string }[];
 }
 
@@ -49,16 +68,23 @@ const drivers2024: Driver[] = [
 ];
 
 const circuits2024: Circuit[] = [
-  { id: "bah", name: "Bahrain GP", country: "Bahrain", laps: 57, length: "5.412 km", fastestLap: "1:31.447" },
-  { id: "jed", name: "Saudi Arabian GP", country: "Arábia Saudita", laps: 50, length: "6.174 km", fastestLap: "1:27.472" },
-  { id: "mel", name: "Australian GP", country: "Austrália", laps: 58, length: "5.278 km", fastestLap: "1:19.813" },
-  { id: "suz", name: "Japanese GP", country: "Japão", laps: 53, length: "5.807 km", fastestLap: "1:30.983" },
-  { id: "sha", name: "Chinese GP", country: "China", laps: 56, length: "5.451 km", fastestLap: "1:33.584" },
-  { id: "mia", name: "Miami GP", country: "EUA", laps: 57, length: "5.412 km", fastestLap: "1:29.708" },
-  { id: "imo", name: "Emilia Romagna GP", country: "Itália", laps: 63, length: "4.909 km", fastestLap: "1:15.203" },
-  { id: "mon", name: "Monaco GP", country: "Mônaco", laps: 78, length: "3.337 km", fastestLap: "1:12.143" },
-  { id: "bar", name: "Spanish GP", country: "Espanha", laps: 66, length: "4.657 km", fastestLap: "1:13.704" },
-  { id: "sil", name: "British GP", country: "Reino Unido", laps: 52, length: "5.891 km", fastestLap: "1:28.473" },
+  { id: "bah", name: "Bahrain GP", country: "Bahrain", laps: 57, length: "5.412 km", fastestLap: "1:31.447", sectors: [{ sector: 1, time: "0:28.523", driver: "Max Verstappen" }, { sector: 2, time: "0:35.412", driver: "Charles Leclerc" }, { sector: 3, time: "0:27.512", driver: "Max Verstappen" }] },
+  { id: "jed", name: "Saudi Arabian GP", country: "Arábia Saudita", laps: 50, length: "6.174 km", fastestLap: "1:27.472", sectors: [{ sector: 1, time: "0:25.102", driver: "Max Verstappen" }, { sector: 2, time: "0:34.890", driver: "Lando Norris" }, { sector: 3, time: "0:27.480", driver: "Max Verstappen" }] },
+  { id: "mel", name: "Australian GP", country: "Austrália", laps: 58, length: "5.278 km", fastestLap: "1:19.813", sectors: [{ sector: 1, time: "0:24.312", driver: "Carlos Sainz" }, { sector: 2, time: "0:29.456", driver: "Charles Leclerc" }, { sector: 3, time: "0:26.045", driver: "Carlos Sainz" }] },
+  { id: "suz", name: "Japanese GP", country: "Japão", laps: 53, length: "5.807 km", fastestLap: "1:30.983", sectors: [{ sector: 1, time: "0:29.234", driver: "Max Verstappen" }, { sector: 2, time: "0:40.112", driver: "Max Verstappen" }, { sector: 3, time: "0:21.637", driver: "Lando Norris" }] },
+  { id: "sha", name: "Chinese GP", country: "China", laps: 56, length: "5.451 km", fastestLap: "1:33.584", sectors: [{ sector: 1, time: "0:30.456", driver: "Max Verstappen" }, { sector: 2, time: "0:36.234", driver: "Charles Leclerc" }, { sector: 3, time: "0:26.894", driver: "Lando Norris" }] },
+  { id: "mia", name: "Miami GP", country: "EUA", laps: 57, length: "5.412 km", fastestLap: "1:29.708", sectors: [{ sector: 1, time: "0:27.345", driver: "Lando Norris" }, { sector: 2, time: "0:35.678", driver: "Max Verstappen" }, { sector: 3, time: "0:26.685", driver: "Lando Norris" }] },
+  { id: "imo", name: "Emilia Romagna GP", country: "Itália", laps: 63, length: "4.909 km", fastestLap: "1:15.203", sectors: [{ sector: 1, time: "0:23.456", driver: "Max Verstappen" }, { sector: 2, time: "0:28.912", driver: "Oscar Piastri" }, { sector: 3, time: "0:22.835", driver: "Max Verstappen" }] },
+  { id: "mon", name: "Monaco GP", country: "Mônaco", laps: 78, length: "3.337 km", fastestLap: "1:12.143", sectors: [{ sector: 1, time: "0:19.234", driver: "Charles Leclerc" }, { sector: 2, time: "0:32.456", driver: "Charles Leclerc" }, { sector: 3, time: "0:20.453", driver: "Carlos Sainz" }] },
+  { id: "bar", name: "Spanish GP", country: "Espanha", laps: 66, length: "4.657 km", fastestLap: "1:13.704", sectors: [{ sector: 1, time: "0:22.345", driver: "Lando Norris" }, { sector: 2, time: "0:28.912", driver: "Max Verstappen" }, { sector: 3, time: "0:22.447", driver: "Lando Norris" }] },
+  { id: "sil", name: "British GP", country: "Reino Unido", laps: 52, length: "5.891 km", fastestLap: "1:28.473", sectors: [{ sector: 1, time: "0:28.123", driver: "Lewis Hamilton" }, { sector: 2, time: "0:35.678", driver: "Lewis Hamilton" }, { sector: 3, time: "0:24.672", driver: "Max Verstappen" }] },
+];
+
+const teams2024: Team[] = [
+  { id: "redbull", name: "Red Bull Racing", color: "#3671C6", points: 589, wins: 9, podiums: 17, drivers: ["Max Verstappen", "Sergio Pérez"], avgFinish: 2.8 },
+  { id: "mclaren", name: "McLaren", color: "#FF8000", points: 666, wins: 6, podiums: 24, drivers: ["Lando Norris", "Oscar Piastri"], avgFinish: 3.1 },
+  { id: "ferrari", name: "Ferrari", color: "#E8002D", points: 646, wins: 5, podiums: 23, drivers: ["Charles Leclerc", "Carlos Sainz"], avgFinish: 3.4 },
+  { id: "mercedes", name: "Mercedes", color: "#27F4D2", points: 428, wins: 4, podiums: 12, drivers: ["Lewis Hamilton", "George Russell"], avgFinish: 4.6 },
 ];
 
 const pointsProgression2024 = [
@@ -95,6 +121,7 @@ export const seasons: SeasonData[] = [
     drivers: drivers2024,
     circuits: circuits2024,
     results: results2024,
+    teams: teams2024,
     pointsProgression: pointsProgression2024,
   },
 ];
