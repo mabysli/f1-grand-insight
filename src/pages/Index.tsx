@@ -8,6 +8,7 @@ import CircuitComparison from "@/components/CircuitComparison";
 import CircuitDetail from "@/components/CircuitDetail";
 import TeamComparison from "@/components/TeamComparison";
 import RaceResults from "@/components/RaceResults";
+import RacePositionChart from "@/components/RacePositionChart";
 import { getSeasonYears, getSeasonData } from "@/data/f1-data";
 
 const Index = () => {
@@ -56,6 +57,11 @@ const Index = () => {
         />
 
         <TeamComparison teams={season.teams} />
+
+        <RacePositionChart
+          raceLaps={season.raceLaps}
+          drivers={season.drivers}
+        />
 
         <DriverStandings
           drivers={season.drivers}
