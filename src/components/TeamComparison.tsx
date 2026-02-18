@@ -7,6 +7,12 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  Legend,
 } from "recharts";
 import { type Team } from "@/data/f1-data";
 import { Trophy, Medal, TrendingUp } from "lucide-react";
@@ -14,6 +20,14 @@ import { Trophy, Medal, TrendingUp } from "lucide-react";
 interface TeamComparisonProps {
   teams: Team[];
 }
+
+// Derived metrics per team (0-100 scale)
+const teamMetrics: Record<string, { speed: number; reliability: number; strategy: number; pace: number; qualifying: number }> = {
+  redbull:  { speed: 92, reliability: 78, strategy: 88, pace: 90, qualifying: 88 },
+  mclaren:  { speed: 90, reliability: 85, strategy: 82, pace: 88, qualifying: 86 },
+  ferrari:  { speed: 87, reliability: 80, strategy: 75, pace: 85, qualifying: 87 },
+  mercedes: { speed: 82, reliability: 88, strategy: 84, pace: 80, qualifying: 82 },
+};
 
 const TeamComparison = ({ teams }: TeamComparisonProps) => {
   const sorted = [...teams].sort((a, b) => b.points - a.points);
@@ -23,6 +37,14 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
     points: t.points,
     color: t.color,
   }));
+
+  const radarData = [
+    { metric: "Velocidade",    ...Object.fromEntries(sorted.map(t => [t.id, teamMetrics[t.id]?.speed ?? 70])) },
+    { metric: "Confiabilidade",...Object.fromEntries(sorted.map(t => [t.id, teamMetrics[t.id]?.reliability ?? 70])) },
+    { metric: "Estratégia",    ...Object.fromEntries(sorted.map(t => [t.id, teamMetrics[t.id]?.strategy ?? 70])) },
+    { metric: "Ritmo de Corrida",...Object.fromEntries(sorted.map(t => [t.id, teamMetrics[t.id]?.pace ?? 70])) },
+    { metric: "Classificação", ...Object.fromEntries(sorted.map(t => [t.id, teamMetrics[t.id]?.qualifying ?? 70])) },
+  ];
 
   return (
     <div className="space-y-4">
@@ -132,6 +154,63 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
                 ))}
               </Bar>
             </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      {/* Radar chart */}
+      <div
+        className="rounded-xl border border-border bg-card p-5"
+        style={{ boxShadow: "var(--shadow-card)" }}
+      >
+        <h3 className="font-racing text-sm tracking-wide text-foreground mb-1">
+          Radar de Desempenho por Equipe
+        </h3>
+        <p className="text-xs text-muted-foreground mb-4">
+          Comparação multidimensional — velocidade, estratégia, confiabilidade, ritmo e classificação
+        </p>
+        <div className="h-[340px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <RadarChart data={radarData} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
+              <PolarGrid stroke="hsl(220 15% 18%)" />
+              <PolarAngleAxis
+                dataKey="metric"
+                tick={{ fill: "hsl(220 10% 65%)", fontSize: 11, fontFamily: "Orbitron" }}
+              />
+              <PolarRadiusAxis
+                angle={90}
+                domain={[60, 100]}
+                tick={{ fill: "hsl(220 10% 45%)", fontSize: 9 }}
+                tickCount={3}
+              />
+              {sorted.map((team) => (
+                <Radar
+                  key={team.id}
+                  name={team.name.replace(" Racing", "")}
+                  dataKey={team.id}
+                  stroke={team.color}
+                  fill={team.color}
+                  fillOpacity={0.12}
+                  strokeWidth={2}
+                />
+              ))}
+              <Legend
+                wrapperStyle={{ fontFamily: "Orbitron", fontSize: "10px", paddingTop: "12px" }}
+                formatter={(value) => (
+                  <span style={{ color: "hsl(0 0% 80%)" }}>{value}</span>
+                )}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(220 18% 12%)",
+                  border: "1px solid hsl(220 15% 18%)",
+                  borderRadius: "8px",
+                  fontFamily: "Inter",
+                  fontSize: "12px",
+                  color: "hsl(0 0% 95%)",
+                }}
+              />
+            </RadarChart>
           </ResponsiveContainer>
         </div>
       </div>
