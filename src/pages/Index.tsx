@@ -14,7 +14,7 @@ import { seasons as fallbackSeasons } from "@/data/f1-data";
 import { Loader2 } from "lucide-react";
 
 const Index = () => {
-  const [selectedSeason, setSelectedSeason] = useState(API_SEASONS[0]);
+  const [selectedSeason, setSelectedSeason] = useState(2024);
   const [selectedDriver, setSelectedDriver] = useState("all");
   const [selectedCircuit, setSelectedCircuit] = useState("all");
 
