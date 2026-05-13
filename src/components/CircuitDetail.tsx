@@ -46,11 +46,20 @@ const CircuitDetail = ({ circuits, selectedCircuit }: CircuitDetailProps) => {
           >
             {/* Track image */}
             <div className="relative h-48 bg-secondary/50 flex items-center justify-center p-4">
-              <img
-                src={circuitImages[circuit.id]}
-                alt={`Trajeto ${circuit.name}`}
-                className="h-full w-full object-contain opacity-90"
-              />
+              {circuitImages[circuit.id] ? (
+                <img
+                  src={circuitImages[circuit.id]}
+                  alt={`Trajeto ${circuit.name}`}
+                  className="h-full w-full object-contain opacity-90"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center text-muted-foreground">
+                  <MapPin className="h-10 w-10 mb-2 opacity-40" />
+                  <span className="text-xs font-racing tracking-widest opacity-60">
+                    SEM IMAGEM
+                  </span>
+                </div>
+              )}
               <div className="absolute top-3 left-3">
                 <span className="text-xs font-racing tracking-wider text-muted-foreground bg-background/80 px-2 py-1 rounded">
                   {circuit.country}
