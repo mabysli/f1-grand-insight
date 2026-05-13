@@ -14,16 +14,13 @@ import barcelona from "@/assets/circuits/barcelona.png";
 import silverstone from "@/assets/circuits/silverstone.png";
 
 const circuitImages: Record<string, string> = {
-  bah: bahrain,
-  jed: jeddah,
-  mel: melbourne,
-  suz: suzuka,
-  sha: shanghai,
-  mia: miami,
-  imo: imola,
-  mon: monaco,
-  bar: barcelona,
-  sil: silverstone,
+  // legacy short ids
+  bah: bahrain, jed: jeddah, mel: melbourne, suz: suzuka, sha: shanghai,
+  mia: miami, imo: imola, mon: monaco, bar: barcelona, sil: silverstone,
+  // f1api.dev ids
+  bahrain, jeddah, suzuka, shanghai, miami, imola, monaco, silverstone,
+  albert_park: melbourne,
+  montmelo: barcelona,
 };
 
 interface CircuitDetailProps {
