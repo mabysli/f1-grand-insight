@@ -9,6 +9,7 @@ import CircuitDetail from "@/components/CircuitDetail";
 import TeamComparison from "@/components/TeamComparison";
 import RaceResults from "@/components/RaceResults";
 import RacePositionChart from "@/components/RacePositionChart";
+import HeadToHead from "@/components/HeadToHead";
 import { useF1Season, API_SEASONS } from "@/hooks/useF1Season";
 import { seasons as fallbackSeasons } from "@/data/f1-data";
 import { Loader2 } from "lucide-react";
@@ -86,6 +87,9 @@ const Index = () => {
             />
 
             <TeamComparison teams={season.teams} />
+
+            <HeadToHead drivers={season.drivers} teams={season.teams} />
+
 
             {raceLaps.length > 0 && (
               <RacePositionChart
