@@ -88,6 +88,9 @@ const Index = () => {
 
             <TeamComparison teams={season.teams} />
 
+            <HeadToHead drivers={season.drivers} teams={season.teams} />
+
+
             {raceLaps.length > 0 && (
               <RacePositionChart
                 raceLaps={raceLaps}
