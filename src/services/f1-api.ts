@@ -268,4 +268,4 @@ export async function fetchSeasonData(year: number): Promise<SeasonData> {
 }
 
 // ── Available seasons ────────────────────────────────────────────────────────
-export const API_SEASONS = [2025, 2024, 2023, 2022, 2021, 2020];
+export const API_SEASONS = [2026, 2025, 2024, 2023, 2022, 2021, 2020];

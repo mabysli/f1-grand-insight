@@ -15,7 +15,7 @@ import { seasons as fallbackSeasons } from "@/data/f1-data";
 import { Loader2 } from "lucide-react";
 
 const Index = () => {
-  const [selectedSeason, setSelectedSeason] = useState(2024);
+  const [selectedSeason, setSelectedSeason] = useState(2026);
   const [selectedDriver, setSelectedDriver] = useState("all");
   const [selectedCircuit, setSelectedCircuit] = useState("all");
 
@@ -108,6 +108,7 @@ const Index = () => {
               selectedCircuit={selectedCircuit}
               selectedDriver={selectedDriver}
               circuitNames={season.circuits.map((c) => ({ id: c.id, name: c.name }))}
+              drivers={season.drivers}
             />
           </>
         )}

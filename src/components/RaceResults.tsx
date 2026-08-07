@@ -1,13 +1,14 @@
-import { type RaceResult } from "@/data/f1-data";
+import { type RaceResult, type Driver } from "@/data/f1-data";
 
 interface RaceResultsProps {
   results: RaceResult[];
   selectedCircuit: string;
   selectedDriver: string;
   circuitNames: { id: string; name: string }[];
+  drivers: Driver[];
 }
 
-const RaceResults = ({ results, selectedCircuit, selectedDriver, circuitNames }: RaceResultsProps) => {
+const RaceResults = ({ results, selectedCircuit, selectedDriver, circuitNames, drivers }: RaceResultsProps) => {
   let filtered = results;
 
   if (selectedCircuit !== "all") {
@@ -16,17 +17,7 @@ const RaceResults = ({ results, selectedCircuit, selectedDriver, circuitNames }:
   }
 
   if (selectedDriver !== "all") {
-    const driverNames: Record<string, string> = {
-      ver: "Max Verstappen",
-      nor: "Lando Norris",
-      lec: "Charles Leclerc",
-      pia: "Oscar Piastri",
-      sai: "Carlos Sainz",
-      ham: "Lewis Hamilton",
-      rus: "George Russell",
-      per: "Sergio Pérez",
-    };
-    const name = driverNames[selectedDriver];
+    const name = drivers.find((d) => d.id === selectedDriver)?.name;
     if (name) filtered = filtered.filter((r) => r.driver === name);
   }
 
