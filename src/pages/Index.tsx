@@ -108,6 +108,7 @@ const Index = () => {
               selectedCircuit={selectedCircuit}
               selectedDriver={selectedDriver}
               circuitNames={season.circuits.map((c) => ({ id: c.id, name: c.name }))}
+              drivers={season.drivers}
             />
           </>
         )}
