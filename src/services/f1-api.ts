@@ -109,6 +109,13 @@ function driverShortId(shortName: string): string {
 // ── Generic fetch helper ─────────────────────────────────────────────────────
 async function apiFetch<T>(path: string, limit = 30): Promise<T> {
   const url = `${BASE}${path}?limit=${limit}`;
+  // TODO (integração API paga): adicionar headers de autenticação aqui.
+  // Exemplo:
+  //   headers: {
+  //     "Authorization": `Bearer ${import.meta.env.VITE_F1_API_KEY}`,
+  //     "X-API-Key": import.meta.env.VITE_F1_API_KEY,
+  //   }
+  // A chave deve ser armazenada via add_secret e nunca hardcoded.
   const res = await fetch(url);
   if (!res.ok) throw new Error(`F1 API ${res.status}: ${url}`);
   return res.json();
