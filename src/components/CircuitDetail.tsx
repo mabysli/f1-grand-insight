@@ -70,12 +70,13 @@ const CircuitDetail = ({ circuits, selectedCircuit }: CircuitDetailProps) => {
           >
             {/* Track image */}
             <div className="relative h-48 bg-secondary/50 flex items-center justify-center p-4">
-              {circuitImages[circuit.id] ? (
+              {circuitImage(circuit) ? (
                 <img
-                  src={circuitImages[circuit.id]}
+                  src={circuitImage(circuit)}
                   alt={`Trajeto ${circuit.name}`}
                   className="h-full w-full object-contain opacity-90"
                 />
+
               ) : (
                 <div className="flex flex-col items-center justify-center text-muted-foreground">
                   <MapPin className="h-10 w-10 mb-2 opacity-40" />
