@@ -351,4 +351,5 @@ export async function fetchSeasonData(year: number): Promise<SeasonData> {
 }
 
 // ── Available seasons ────────────────────────────────────────────────────────
+// TODO (integração API paga): ajustar conforme os anos disponíveis no plano contratado.
 export const API_SEASONS = [2026, 2025, 2024, 2023, 2022, 2021, 2020];
