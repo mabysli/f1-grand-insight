@@ -23,6 +23,30 @@ const circuitImages: Record<string, string> = {
   montmelo: barcelona,
 };
 
+// api-sports usa nomes completos de circuito — match por palavra-chave
+const circuitKeywords: [string, string][] = [
+  ["bahrain", bahrain],
+  ["jeddah", jeddah],
+  ["albert", melbourne],
+  ["melbourne", melbourne],
+  ["suzuka", suzuka],
+  ["shanghai", shanghai],
+  ["miami", miami],
+  ["imola", imola],
+  ["enzo", imola],
+  ["monaco", monaco],
+  ["monte", monaco],
+  ["catalunya", barcelona],
+  ["barcelona", barcelona],
+  ["silverstone", silverstone],
+];
+
+function circuitImage(circuit: { id: string; name: string }): string | undefined {
+  if (circuitImages[circuit.id]) return circuitImages[circuit.id];
+  const haystack = `${circuit.id} ${circuit.name}`.toLowerCase();
+  return circuitKeywords.find(([key]) => haystack.includes(key))?.[1];
+}
+
 interface CircuitDetailProps {
   circuits: Circuit[];
   selectedCircuit: string;
