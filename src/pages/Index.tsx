@@ -116,7 +116,7 @@ const Index = () => {
 
       <footer className="border-t border-border py-6 mt-8">
         <p className="text-center text-xs text-muted-foreground font-racing tracking-widest">
-          F1 ANALYTICS DASHBOARD · DADOS VIA F1API.DEV · {selectedSeason}
+          F1 ANALYTICS DASHBOARD · DADOS VIA API-SPORTS.IO · {selectedSeason}
         </p>
       </footer>
     </div>
