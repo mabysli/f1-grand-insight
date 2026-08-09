@@ -15,7 +15,7 @@ import { seasons as fallbackSeasons } from "@/data/f1-data";
 import { Loader2 } from "lucide-react";
 
 const Index = () => {
-  const [selectedSeason, setSelectedSeason] = useState(2026);
+  const [selectedSeason, setSelectedSeason] = useState(2024);
   const [selectedDriver, setSelectedDriver] = useState("all");
   const [selectedCircuit, setSelectedCircuit] = useState("all");
 
@@ -116,7 +116,7 @@ const Index = () => {
 
       <footer className="border-t border-border py-6 mt-8">
         <p className="text-center text-xs text-muted-foreground font-racing tracking-widest">
-          F1 ANALYTICS DASHBOARD · DADOS VIA F1API.DEV · {selectedSeason}
+          F1 ANALYTICS DASHBOARD · DADOS VIA API-SPORTS.IO · {selectedSeason}
         </p>
       </footer>
     </div>

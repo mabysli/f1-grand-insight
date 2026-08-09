@@ -14,7 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      f1_api_cache: {
+        Row: {
+          cache_key: string
+          data: Json
+          fetched_at: string
+        }
+        Insert: {
+          cache_key: string
+          data: Json
+          fetched_at?: string
+        }
+        Update: {
+          cache_key?: string
+          data?: Json
+          fetched_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

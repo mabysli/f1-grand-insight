@@ -23,6 +23,30 @@ const circuitImages: Record<string, string> = {
   montmelo: barcelona,
 };
 
+// api-sports usa nomes completos de circuito — match por palavra-chave
+const circuitKeywords: [string, string][] = [
+  ["bahrain", bahrain],
+  ["jeddah", jeddah],
+  ["albert", melbourne],
+  ["melbourne", melbourne],
+  ["suzuka", suzuka],
+  ["shanghai", shanghai],
+  ["miami", miami],
+  ["imola", imola],
+  ["enzo", imola],
+  ["monaco", monaco],
+  ["monte", monaco],
+  ["catalunya", barcelona],
+  ["barcelona", barcelona],
+  ["silverstone", silverstone],
+];
+
+function circuitImage(circuit: { id: string; name: string }): string | undefined {
+  if (circuitImages[circuit.id]) return circuitImages[circuit.id];
+  const haystack = `${circuit.id} ${circuit.name}`.toLowerCase();
+  return circuitKeywords.find(([key]) => haystack.includes(key))?.[1];
+}
+
 interface CircuitDetailProps {
   circuits: Circuit[];
   selectedCircuit: string;
@@ -46,12 +70,13 @@ const CircuitDetail = ({ circuits, selectedCircuit }: CircuitDetailProps) => {
           >
             {/* Track image */}
             <div className="relative h-48 bg-secondary/50 flex items-center justify-center p-4">
-              {circuitImages[circuit.id] ? (
+              {circuitImage(circuit) ? (
                 <img
-                  src={circuitImages[circuit.id]}
+                  src={circuitImage(circuit)}
                   alt={`Trajeto ${circuit.name}`}
                   className="h-full w-full object-contain opacity-90"
                 />
+
               ) : (
                 <div className="flex flex-col items-center justify-center text-muted-foreground">
                   <MapPin className="h-10 w-10 mb-2 opacity-40" />
