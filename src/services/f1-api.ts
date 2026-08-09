@@ -1,9 +1,85 @@
 /**
  * F1 API Service — fetches data from f1api.dev
  * and transforms it into our app's domain types.
+ *
+ * ===================================================================
+ *  INTEGRAÇÃO COM API PAGA DE F1 — INFORMAÇÕES NECESSÁRIAS
+ * ===================================================================
+ *
+ *  A API atual usada neste projeto é a f1api.dev (https://f1api.dev).
+ *  Para dados mais completos, em tempo real ou históricos, você pode
+ *  substituí-la por uma API paga. Abaixo estão as informações que o
+ *  Claude precisa para fazer a integração corretamente:
+ *
+ *  1. PROVEDOR DE API ESCOLHIDO
+ *     - Indique qual API paga será usada. Exemplos comuns:
+ *       · Ergast F1 API (gratuita/legacy, http://ergast.com/mrd/)
+ *       · OpenF1 (gratuita com dados de telemetria, https://openf1.org)
+ *       · F1 API paga comercial (FastF1, Jolpica, etc.)
+ *       · API própria da Formula 1 (via parceiro oficial)
+ *     - Cada uma tem endpoints, autenticação e limites diferentes.
+ *
+ *  2. CREDENCIAIS DE ACESSO
+ *     - API Key (token de autenticação), se o provedor exigir.
+ *     - Base URL da API (ex: https://api.provedor-f1.com/v1).
+ *     - Headers obrigatórios (ex: Authorization, X-API-Key, Content-Type).
+ *     - Plano contratado e limites de requisição (requests/mês, rate limit).
+ *
+ *  3. ENDPOINTS NECESSÁRIOS PARA O DASHBOARD
+ *     Este projeto consome os seguintes dados. A nova API precisa
+ *     fornecer endpoints equivalentes para:
+ *       · Classificação de pilotos (Driver Standings) por ano.
+ *       · Classificação de construtores (Constructor Standings) por ano.
+ *       · Lista de corridas/circuitos da temporada.
+ *       · Resultados de cada corrida (posições, pontos, voltas mais rápidas).
+ *       · Dados volta a volta (Race Position Chart) — opcional, hoje simulado.
+ *       · Telemetria/setores por circuito — opcional, hoje não usado.
+ *
+ *  4. MAPEAMENTO DE DADOS
+ *     - O provedor deve retornar: nome do piloto, equipe, nacionalidade,
+ *       número, pontos, vitórias, posição, nome do circuito, país, etc.
+ *     - As cores das equipes não vêm da API; estão no mapa TEAM_COLORS
+ *       abaixo. Se os IDs das equipes mudarem, atualize esse mapa.
+ *     - Se a API pagar já fornecer cores, retire ou ajuste TEAM_COLORS.
+ *
+ *  5. O QUE PRECISA SER ALTERADO NO CÓDIGO
+ *     - BASE: alterar a URL base da API.
+ *     - apiFetch(): adicionar headers de autenticação (API key, token, etc.).
+ *     - Interfaces (APIDriverStanding, APIConstructorStanding, APIRaceResult,
+ *       APIRace): ajustar para o formato JSON da nova API.
+ *     - Funções fetchDriverStandings, fetchConstructorStandings, fetchRaces,
+ *       fetchRaceResults: atualizar endpoints e campos retornados.
+ *     - fetchSeasonData(): ajustar a montagem dos dados caso a estrutura mude.
+ *     - API_SEASONS: atualizar as temporadas disponíveis se a API pagar
+ *       suportar anos diferentes.
+ *     - Caso a API paga exija proxy/segurança para a chave, mover as
+ *       requisições para um Supabase Edge Function (Lovable Cloud) em vez
+ *       de chamar diretamente do frontend.
+ *
+ *  6. ARMAZENAMENTO SEGURO DA CHAVE DE API
+ *     - Nunca deixe a chave da API paga hardcoded no código-fonte.
+ *     - No Lovable Cloud, use a ferramenta add_secret para armazenar a chave.
+ *     - Se a chamada for feita no frontend, a chave ficará exposta no
+ *       navegador. O ideal é chamar a API paga via Edge Function.
+ *
+ *  7. EXEMPLO DE COMO PASSAR ISSO AO CLAUDE
+ *     "Integre a API paga X no projeto F1 Analytics.
+ *      Base URL: https://api.exemplo.com/v1
+ *      Chave de API: (será armazenada via add_secret como F1_API_KEY)
+ *      Endpoints:
+ *        - GET /drivers-standings/{year}
+ *        - GET /constructors-standings/{year}
+ *        - GET /seasons/{year}/races
+ *        - GET /races/{year}/{round}/results
+ *      Formato: o JSON retornado segue o padrão anexado.
+ *      Requisitos: manter todas as visualizações atuais e adicionar dados
+ *      volta a volta quando disponíveis."
+ *
+ * ===================================================================
  */
 
 const BASE = "https://f1api.dev/api";
+// ^^^ ALTERAR AQUI: substituir pela base URL da API paga escolhida.
 
 // ── Team color map (API doesn't provide colors) ──────────────────────────────
 const TEAM_COLORS: Record<string, string> = {
@@ -33,6 +109,13 @@ function driverShortId(shortName: string): string {
 // ── Generic fetch helper ─────────────────────────────────────────────────────
 async function apiFetch<T>(path: string, limit = 30): Promise<T> {
   const url = `${BASE}${path}?limit=${limit}`;
+  // TODO (integração API paga): adicionar headers de autenticação aqui.
+  // Exemplo:
+  //   headers: {
+  //     "Authorization": `Bearer ${import.meta.env.VITE_F1_API_KEY}`,
+  //     "X-API-Key": import.meta.env.VITE_F1_API_KEY,
+  //   }
+  // A chave deve ser armazenada via add_secret e nunca hardcoded.
   const res = await fetch(url);
   if (!res.ok) throw new Error(`F1 API ${res.status}: ${url}`);
   return res.json();
@@ -268,4 +351,5 @@ export async function fetchSeasonData(year: number): Promise<SeasonData> {
 }
 
 // ── Available seasons ────────────────────────────────────────────────────────
+// TODO (integração API paga): ajustar conforme os anos disponíveis no plano contratado.
 export const API_SEASONS = [2026, 2025, 2024, 2023, 2022, 2021, 2020];
