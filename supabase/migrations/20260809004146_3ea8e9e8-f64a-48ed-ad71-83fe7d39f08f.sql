@@ -1,0 +1,1 @@
+REVOKE ALL ON public.f1_api_cache FROM anon, authenticated;
