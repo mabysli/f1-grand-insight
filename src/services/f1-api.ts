@@ -79,6 +79,7 @@
  */
 
 const BASE = "https://f1api.dev/api";
+// ^^^ ALTERAR AQUI: substituir pela base URL da API paga escolhida.
 
 // ── Team color map (API doesn't provide colors) ──────────────────────────────
 const TEAM_COLORS: Record<string, string> = {
