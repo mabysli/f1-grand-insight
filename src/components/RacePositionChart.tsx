@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-import { type Driver, type RaceLapData } from "@/data/f1-data";
+import { type Driver, type LapPoint, type RaceLapData } from "@/data/f1-data";
 import { Button } from "@/components/ui/button";
 
 interface RacePositionChartProps {
@@ -134,7 +134,7 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
         const gridPosition = drivers.findIndex((item) => item.id === driver.id) + 1;
         return {
           driverId: driver.id,
-          laps: Array.from({ length: sourceRace.totalLaps }, (_, lapIndex) => {
+          laps: Array.from({ length: sourceRace.totalLaps }, (_, lapIndex): LapPoint => {
             const wave = Math.round(Math.sin((lapIndex + driverIndex * 2) / 5));
             const position = Math.min(drivers.length, Math.max(1, gridPosition + wave));
             const seconds = 31 + driverIndex * 0.18 + (lapIndex % 7) * 0.06;
