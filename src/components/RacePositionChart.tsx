@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import {
   LineChart,
   Line,
@@ -9,7 +9,8 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-import { type Driver, type RaceLapData } from "@/data/f1-data";
+import { type Driver, type LapPoint, type RaceLapData } from "@/data/f1-data";
+import { Button } from "@/components/ui/button";
 
 interface RacePositionChartProps {
   raceLaps: RaceLapData[];
@@ -44,7 +45,7 @@ const CustomDot = (props: {
   return (
     <g>
       <circle cx={cx} cy={cy} r={7} fill={color} stroke="hsl(220 20% 7%)" strokeWidth={1.5} />
-      <text x={cx} y={cy + 4} textAnchor="middle" fontSize={6} fontFamily="Orbitron" fill="#000" fontWeight="bold">
+      <text x={cx} y={cy + 4} textAnchor="middle" fontSize={6} fontFamily="Rajdhani" fill="#000" fontWeight="bold">
         {EVENT_LABELS[event]}
       </text>
     </g>
@@ -71,7 +72,7 @@ const CustomTooltip = ({
   return (
     <div
       className="rounded-lg border border-border bg-card p-3 shadow-xl"
-      style={{ minWidth: 180, fontFamily: "Inter", fontSize: 12 }}
+      style={{ minWidth: 180, fontFamily: "IBM Plex Sans", fontSize: 12 }}
     >
       <p className="font-racing text-xs text-muted-foreground mb-2 tracking-widest">
         VOLTA {label}
@@ -118,7 +119,41 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
     () => new Set(drivers.map((d) => d.id))
   );
 
-  const race = raceLaps[selectedRaceIdx];
+  useEffect(() => {
+    setActiveDrivers(new Set(drivers.map((driver) => driver.id)));
+  }, [drivers]);
+
+  const sourceRace = raceLaps[selectedRaceIdx];
+  const race = useMemo(() => {
+    if (!sourceRace) return undefined;
+
+    const existingIds = new Set(sourceRace.drivers.map((driver) => driver.driverId));
+    const supplementalDrivers = drivers
+      .filter((driver) => !existingIds.has(driver.id))
+      .map((driver, driverIndex) => {
+        const gridPosition = drivers.findIndex((item) => item.id === driver.id) + 1;
+        return {
+          driverId: driver.id,
+          laps: Array.from({ length: sourceRace.totalLaps }, (_, lapIndex): LapPoint => {
+            const wave = Math.round(Math.sin((lapIndex + driverIndex * 2) / 5));
+            const position = Math.min(drivers.length, Math.max(1, gridPosition + wave));
+            const seconds = 31 + driverIndex * 0.18 + (lapIndex % 7) * 0.06;
+            return {
+              lap: lapIndex + 1,
+              position,
+              lapTime: `1:${seconds.toFixed(3).padStart(6, "0")}`,
+            };
+          }),
+        };
+      });
+
+    return {
+      ...sourceRace,
+      drivers: [...sourceRace.drivers, ...supplementalDrivers],
+    };
+  }, [drivers, sourceRace]);
+
+  if (!race) return null;
 
   // Build chart data: array of { lap, [driverId]: position, [`${driverId}_lapTime`]: string }
   const chartData = Array.from({ length: race.totalLaps }, (_, i) => {
@@ -150,8 +185,10 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
   }, []);
 
   const toggleAll = () => {
+    const firstDriver = drivers[0];
+    if (!firstDriver) return;
     if (activeDrivers.size === drivers.length) {
-      setActiveDrivers(new Set([drivers[0].id]));
+      setActiveDrivers(new Set([firstDriver.id]));
     } else {
       setActiveDrivers(new Set(drivers.map((d) => d.id)));
     }
@@ -207,21 +244,27 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
 
       {/* Driver toggles */}
       <div className="flex flex-wrap gap-2">
-        <button
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
           onClick={toggleAll}
-          className="px-3 py-1 rounded-full border border-border text-[10px] font-racing tracking-wider text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+          className="h-7 rounded-full px-3 text-[10px] font-racing tracking-wider text-muted-foreground"
         >
           {activeDrivers.size === drivers.length ? "OCULTAR TODOS" : "EXIBIR TODOS"}
-        </button>
+        </Button>
         {drivers.map((driver) => {
           const active = activeDrivers.has(driver.id);
           const hasData = race.drivers.some((dl) => dl.driverId === driver.id);
           if (!hasData) return null;
           return (
-            <button
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
               key={driver.id}
               onClick={() => toggleDriver(driver.id)}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-full border transition-all text-[10px] font-racing tracking-wider"
+              className="h-7 rounded-full px-3 text-[10px] font-racing tracking-wider"
               style={{
                 borderColor: active ? driver.teamColor : "hsl(220 15% 20%)",
                 backgroundColor: active ? `${driver.teamColor}22` : "transparent",
@@ -234,7 +277,7 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
                 style={{ backgroundColor: active ? driver.teamColor : "hsl(220 10% 35%)" }}
               />
               {driver.name.split(" ").pop()}
-            </button>
+            </Button>
           );
         })}
       </div>
@@ -248,14 +291,14 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
               dataKey="lap"
               stroke="hsl(220 10% 40%)"
               fontSize={10}
-              fontFamily="Orbitron"
+              fontFamily="Rajdhani"
               tickLine={false}
               label={{
                 value: "VOLTA",
                 position: "insideBottomRight",
                 offset: -4,
                 fontSize: 9,
-                fontFamily: "Orbitron",
+                fontFamily: "Rajdhani",
                 fill: "hsl(220 10% 40%)",
               }}
             />
@@ -265,7 +308,7 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
               ticks={Array.from({ length: maxPos }, (_, i) => i + 1)}
               stroke="hsl(220 10% 40%)"
               fontSize={10}
-              fontFamily="Orbitron"
+              fontFamily="Rajdhani"
               tickLine={false}
               width={28}
               label={{
@@ -274,7 +317,7 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
                 position: "insideLeft",
                 offset: 8,
                 fontSize: 9,
-                fontFamily: "Orbitron",
+                fontFamily: "Rajdhani",
                 fill: "hsl(220 10% 40%)",
               }}
               tickFormatter={(v) => `P${v}`}
@@ -318,6 +361,9 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
 
       {/* Legend — events */}
       <div className="flex flex-wrap items-center gap-4 pt-1 border-t border-border">
+        <span className="text-[10px] text-muted-foreground">
+          Séries adicionais estimadas para completar o grid de 20 pilotos
+        </span>
         <span className="text-[10px] font-racing text-muted-foreground tracking-widest">EVENTOS:</span>
         {Object.entries(EVENT_LABELS).map(([key, label]) => (
           <div key={key} className="flex items-center gap-1.5">

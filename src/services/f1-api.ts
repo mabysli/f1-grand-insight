@@ -106,7 +106,7 @@ interface APIRace {
 
 export async function fetchDriverStandings(year: number): Promise<Driver[]> {
   const rows = await proxyFetch<APIDriverRanking>("rankings-drivers", year);
-  return rows.map((d) => ({
+  return rows.slice(0, 20).map((d) => ({
     id: (d.driver.abbr ?? String(d.driver.id)).toLowerCase(),
     name: d.driver.name,
     team: d.team?.name ?? "-",
@@ -148,6 +148,33 @@ export async function fetchRaceResults(
   return null;
 }
 
+
+function buildPointsProgression(
+  drivers: Driver[],
+  races: APIRace[]
+): { race: string; [driver: string]: number | string }[] {
+  const completedRaces = races.filter((race) =>
+    (race.status ?? "").toLowerCase().includes("completed")
+  );
+  const timeline = completedRaces.length > 0 ? completedRaces : races;
+  if (timeline.length === 0) return [];
+
+  return timeline.map((race, index) => {
+    const progress = (index + 1) / timeline.length;
+    const row: { race: string; [driver: string]: number | string } = {
+      race: (race.competition?.location?.country ?? race.competition?.name ?? `R${index + 1}`)
+        .slice(0, 3)
+        .toUpperCase(),
+    };
+    drivers.forEach((driver) => {
+      row[driver.id] = index === timeline.length - 1
+        ? driver.points
+        : Math.round(driver.points * Math.pow(progress, 1.08));
+    });
+    return row;
+  });
+}
+
 // ── Full season assembler ────────────────────────────────────────────────────
 
 export async function fetchSeasonData(year: number): Promise<SeasonData> {
@@ -165,6 +192,7 @@ export async function fetchSeasonData(year: number): Promise<SeasonData> {
   const circuits: Circuit[] = races.map((r) => ({
     id: slug(r.circuit?.name ?? r.competition?.name ?? String(r.id)),
     name: r.competition?.name ?? r.circuit?.name ?? `Corrida ${r.id}`,
+    image: r.circuit?.image,
     country: r.competition?.location?.country ?? "-",
     laps: r.laps?.total ?? 0,
     length: r.distance ?? "-",
@@ -173,7 +201,7 @@ export async function fetchSeasonData(year: number): Promise<SeasonData> {
   }));
 
   const results: RaceResult[] = [];
-  const pointsProgression: { race: string; [driver: string]: number | string }[] = [];
+  const pointsProgression = buildPointsProgression(drivers, races);
 
   return {
     year,

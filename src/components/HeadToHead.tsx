@@ -300,7 +300,7 @@ const HeadToHead = ({ drivers, teams }: HeadToHeadProps) => {
                 <PolarGrid stroke="hsl(220 15% 18%)" />
                 <PolarAngleAxis
                   dataKey="metric"
-                  tick={{ fill: "hsl(220 10% 65%)", fontSize: 11, fontFamily: "Orbitron" }}
+                  tick={{ fill: "hsl(220 10% 65%)", fontSize: 11, fontFamily: "Rajdhani" }}
                 />
                 <PolarRadiusAxis
                   angle={90}
@@ -325,7 +325,7 @@ const HeadToHead = ({ drivers, teams }: HeadToHeadProps) => {
                   strokeWidth={2}
                 />
                 <Legend
-                  wrapperStyle={{ fontFamily: "Orbitron", fontSize: "10px", paddingTop: "10px" }}
+                  wrapperStyle={{ fontFamily: "Rajdhani", fontSize: "10px", paddingTop: "10px" }}
                   formatter={(v) => <span style={{ color: "hsl(0 0% 80%)" }}>{v}</span>}
                 />
                 <Tooltip
@@ -333,7 +333,7 @@ const HeadToHead = ({ drivers, teams }: HeadToHeadProps) => {
                     backgroundColor: "hsl(220 18% 12%)",
                     border: "1px solid hsl(220 15% 18%)",
                     borderRadius: "8px",
-                    fontFamily: "Inter",
+                    fontFamily: "IBM Plex Sans",
                     fontSize: "12px",
                     color: "hsl(0 0% 95%)",
                   }}

@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        racing: ['Orbitron', 'sans-serif'],
-        sans: ['Inter', 'sans-serif'],
+        racing: ['Rajdhani', 'sans-serif'],
+        sans: ['IBM Plex Sans', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
