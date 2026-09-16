@@ -47,7 +47,7 @@ const CircuitComparison = ({ circuits, selectedCircuit }: CircuitComparisonProps
             <YAxis
               stroke="hsl(220 10% 55%)"
               fontSize={11}
-              fontFamily="Orbitron"
+              fontFamily="Rajdhani"
               tickLine={false}
             />
             <Tooltip
@@ -55,7 +55,7 @@ const CircuitComparison = ({ circuits, selectedCircuit }: CircuitComparisonProps
                 backgroundColor: "hsl(220 18% 12%)",
                 border: "1px solid hsl(220 15% 18%)",
                 borderRadius: "8px",
-                fontFamily: "Inter",
+                fontFamily: "IBM Plex Sans",
                 fontSize: "12px",
                 color: "hsl(0 0% 95%)",
               }}

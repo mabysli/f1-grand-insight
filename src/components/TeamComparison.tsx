@@ -126,7 +126,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
                 type="number"
                 stroke="hsl(220 10% 55%)"
                 fontSize={11}
-                fontFamily="Orbitron"
+                fontFamily="Rajdhani"
                 tickLine={false}
               />
               <YAxis
@@ -134,7 +134,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
                 dataKey="name"
                 stroke="hsl(220 10% 55%)"
                 fontSize={11}
-                fontFamily="Orbitron"
+                fontFamily="Rajdhani"
                 tickLine={false}
                 width={90}
               />
@@ -143,7 +143,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
                   backgroundColor: "hsl(220 18% 12%)",
                   border: "1px solid hsl(220 15% 18%)",
                   borderRadius: "8px",
-                  fontFamily: "Inter",
+                  fontFamily: "IBM Plex Sans",
                   fontSize: "12px",
                   color: "hsl(0 0% 95%)",
                 }}
@@ -175,7 +175,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
               <PolarGrid stroke="hsl(220 15% 18%)" />
               <PolarAngleAxis
                 dataKey="metric"
-                tick={{ fill: "hsl(220 10% 65%)", fontSize: 11, fontFamily: "Orbitron" }}
+                tick={{ fill: "hsl(220 10% 65%)", fontSize: 11, fontFamily: "Rajdhani" }}
               />
               <PolarRadiusAxis
                 angle={90}
@@ -195,7 +195,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
                 />
               ))}
               <Legend
-                wrapperStyle={{ fontFamily: "Orbitron", fontSize: "10px", paddingTop: "12px" }}
+                wrapperStyle={{ fontFamily: "Rajdhani", fontSize: "10px", paddingTop: "12px" }}
                 formatter={(value) => (
                   <span style={{ color: "hsl(0 0% 80%)" }}>{value}</span>
                 )}
@@ -205,7 +205,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
                   backgroundColor: "hsl(220 18% 12%)",
                   border: "1px solid hsl(220 15% 18%)",
                   borderRadius: "8px",
-                  fontFamily: "Inter",
+                  fontFamily: "IBM Plex Sans",
                   fontSize: "12px",
                   color: "hsl(0 0% 95%)",
                 }}

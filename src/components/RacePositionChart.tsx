@@ -44,7 +44,7 @@ const CustomDot = (props: {
   return (
     <g>
       <circle cx={cx} cy={cy} r={7} fill={color} stroke="hsl(220 20% 7%)" strokeWidth={1.5} />
-      <text x={cx} y={cy + 4} textAnchor="middle" fontSize={6} fontFamily="Orbitron" fill="#000" fontWeight="bold">
+      <text x={cx} y={cy + 4} textAnchor="middle" fontSize={6} fontFamily="Rajdhani" fill="#000" fontWeight="bold">
         {EVENT_LABELS[event]}
       </text>
     </g>
@@ -71,7 +71,7 @@ const CustomTooltip = ({
   return (
     <div
       className="rounded-lg border border-border bg-card p-3 shadow-xl"
-      style={{ minWidth: 180, fontFamily: "Inter", fontSize: 12 }}
+      style={{ minWidth: 180, fontFamily: "IBM Plex Sans", fontSize: 12 }}
     >
       <p className="font-racing text-xs text-muted-foreground mb-2 tracking-widest">
         VOLTA {label}
@@ -248,14 +248,14 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
               dataKey="lap"
               stroke="hsl(220 10% 40%)"
               fontSize={10}
-              fontFamily="Orbitron"
+              fontFamily="Rajdhani"
               tickLine={false}
               label={{
                 value: "VOLTA",
                 position: "insideBottomRight",
                 offset: -4,
                 fontSize: 9,
-                fontFamily: "Orbitron",
+                fontFamily: "Rajdhani",
                 fill: "hsl(220 10% 40%)",
               }}
             />
@@ -265,7 +265,7 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
               ticks={Array.from({ length: maxPos }, (_, i) => i + 1)}
               stroke="hsl(220 10% 40%)"
               fontSize={10}
-              fontFamily="Orbitron"
+              fontFamily="Rajdhani"
               tickLine={false}
               width={28}
               label={{
@@ -274,7 +274,7 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
                 position: "insideLeft",
                 offset: 8,
                 fontSize: 9,
-                fontFamily: "Orbitron",
+                fontFamily: "Rajdhani",
                 fill: "hsl(220 10% 40%)",
               }}
               tickFormatter={(v) => `P${v}`}

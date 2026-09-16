@@ -41,7 +41,8 @@ const circuitKeywords: [string, string][] = [
   ["silverstone", silverstone],
 ];
 
-function circuitImage(circuit: { id: string; name: string }): string | undefined {
+function circuitImage(circuit: { id: string; name: string; image?: string }): string | undefined {
+  if (circuit.image) return circuit.image;
   if (circuitImages[circuit.id]) return circuitImages[circuit.id];
   const haystack = `${circuit.id} ${circuit.name}`.toLowerCase();
   return circuitKeywords.find(([key]) => haystack.includes(key))?.[1];

@@ -20,6 +20,7 @@ export interface SectorTime {
 export interface Circuit {
   id: string;
   name: string;
+  image?: string;
   country: string;
   laps: number;
   length: string;

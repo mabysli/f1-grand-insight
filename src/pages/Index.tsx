@@ -28,7 +28,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader />
-      <main className="container mx-auto px-4 py-6 space-y-6">
+      <main className="w-full px-4 py-6 space-y-6 sm:px-6 lg:px-8 2xl:px-10">
         <FilterBar
           seasons={API_SEASONS}
           selectedSeason={selectedSeason}
