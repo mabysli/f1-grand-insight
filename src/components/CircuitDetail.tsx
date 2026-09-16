@@ -66,7 +66,7 @@ const CircuitDetail = ({ circuits, selectedCircuit }: CircuitDetailProps) => {
         {filtered.map((circuit) => (
           <div
             key={circuit.id}
-            className="rounded-xl border border-border bg-card overflow-hidden"
+            className="rounded-lg border border-border bg-card overflow-hidden"
             style={{ boxShadow: "var(--shadow-card)" }}
           >
             {/* Track image */}
@@ -76,6 +76,7 @@ const CircuitDetail = ({ circuits, selectedCircuit }: CircuitDetailProps) => {
                   src={circuitImage(circuit)}
                   alt={`Trajeto ${circuit.name}`}
                   className="h-full w-full object-contain opacity-90"
+                  loading="lazy"
                 />
 
               ) : (

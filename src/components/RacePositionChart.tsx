@@ -185,8 +185,10 @@ const RacePositionChart = ({ raceLaps, drivers }: RacePositionChartProps) => {
   }, []);
 
   const toggleAll = () => {
+    const firstDriver = drivers[0];
+    if (!firstDriver) return;
     if (activeDrivers.size === drivers.length) {
-      setActiveDrivers(new Set([drivers[0].id]));
+      setActiveDrivers(new Set([firstDriver.id]));
     } else {
       setActiveDrivers(new Set(drivers.map((d) => d.id)));
     }

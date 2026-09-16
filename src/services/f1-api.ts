@@ -106,7 +106,7 @@ interface APIRace {
 
 export async function fetchDriverStandings(year: number): Promise<Driver[]> {
   const rows = await proxyFetch<APIDriverRanking>("rankings-drivers", year);
-  return rows.map((d) => ({
+  return rows.slice(0, 20).map((d) => ({
     id: (d.driver.abbr ?? String(d.driver.id)).toLowerCase(),
     name: d.driver.name,
     team: d.team?.name ?? "-",
