@@ -31,50 +31,59 @@ const FilterBar = ({
   onCircuitChange,
 }: FilterBarProps) => {
   return (
-    <div className="flex flex-wrap gap-3">
-      <Select
-        value={String(selectedSeason)}
-        onValueChange={(v) => onSeasonChange(Number(v))}
-      >
-        <SelectTrigger className="w-[140px] bg-card border-border font-racing text-sm">
-          <SelectValue placeholder="Temporada" />
-        </SelectTrigger>
-        <SelectContent className="bg-popover border-border">
-          {seasons.map((y) => (
-            <SelectItem key={y} value={String(y)}>
-              {y}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <div className="grid gap-3 rounded-2xl border border-border bg-card p-4 sm:grid-cols-3">
+      <div className="min-w-0 space-y-2">
+        <p className="text-xs font-medium text-muted-foreground">Temporada</p>
+        <Select
+          value={String(selectedSeason)}
+          onValueChange={(v) => onSeasonChange(Number(v))}
+        >
+          <SelectTrigger aria-label="Temporada" className="h-10 w-full bg-background text-sm">
+            <SelectValue placeholder="Temporada" />
+          </SelectTrigger>
+          <SelectContent className="bg-popover border-border">
+            {seasons.map((y) => (
+              <SelectItem key={y} value={String(y)}>
+                {y}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-      <Select value={selectedDriver} onValueChange={onDriverChange}>
-        <SelectTrigger className="w-[200px] bg-card border-border text-sm">
-          <SelectValue placeholder="Todos os Pilotos" />
-        </SelectTrigger>
-        <SelectContent className="bg-popover border-border">
-          <SelectItem value="all">Todos os Pilotos</SelectItem>
-          {drivers.map((d) => (
-            <SelectItem key={d.id} value={d.id}>
-              {d.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className="min-w-0 space-y-2">
+        <p className="text-xs font-medium text-muted-foreground">Piloto</p>
+        <Select value={selectedDriver} onValueChange={onDriverChange}>
+          <SelectTrigger aria-label="Piloto" className="h-10 w-full bg-background text-sm">
+            <SelectValue placeholder="Todos os Pilotos" />
+          </SelectTrigger>
+          <SelectContent className="bg-popover border-border">
+            <SelectItem value="all">Todos os Pilotos</SelectItem>
+            {drivers.map((d) => (
+              <SelectItem key={d.id} value={d.id}>
+                {d.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-      <Select value={selectedCircuit} onValueChange={onCircuitChange}>
-        <SelectTrigger className="w-[200px] bg-card border-border text-sm">
-          <SelectValue placeholder="Todos os Circuitos" />
-        </SelectTrigger>
-        <SelectContent className="bg-popover border-border">
-          <SelectItem value="all">Todos os Circuitos</SelectItem>
-          {circuits.map((c) => (
-            <SelectItem key={c.id} value={c.id}>
-              {c.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className="min-w-0 space-y-2">
+        <p className="text-xs font-medium text-muted-foreground">Circuito</p>
+        <Select value={selectedCircuit} onValueChange={onCircuitChange}>
+          <SelectTrigger aria-label="Circuito" className="h-10 w-full bg-background text-sm">
+            <SelectValue placeholder="Todos os Circuitos" />
+          </SelectTrigger>
+          <SelectContent className="bg-popover border-border">
+            <SelectItem value="all">Todos os Circuitos</SelectItem>
+            {circuits.map((c) => (
+              <SelectItem key={c.id} value={c.id}>
+                {c.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
     </div>
   );
 };

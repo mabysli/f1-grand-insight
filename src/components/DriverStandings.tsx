@@ -27,9 +27,9 @@ const DriverStandings = ({ drivers, selectedDriver }: DriverStandingsProps) => {
   };
 
   return (
-    <div className="rounded-xl border border-border bg-card overflow-hidden" style={{ boxShadow: "var(--shadow-card)" }}>
+    <div className="min-w-0 rounded-2xl border border-border bg-card overflow-hidden" style={{ boxShadow: "var(--shadow-card)" }}>
       <div className="p-5 border-b border-border">
-        <h2 className="font-racing text-lg tracking-wide text-foreground">
+        <h2 className="text-lg font-semibold tracking-tight text-foreground">
           Classificação dos Pilotos
         </h2>
       </div>

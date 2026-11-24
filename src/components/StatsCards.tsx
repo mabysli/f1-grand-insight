@@ -42,13 +42,13 @@ const StatsCards = ({ drivers, totalRaces }: StatsCardsProps) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className={`rounded-xl border p-5 animate-slide-in transition-all hover:scale-[1.02] ${
+          className={`min-w-0 rounded-2xl border p-3.5 sm:p-5 ${
             stat.highlight
-              ? "bg-gradient-glow border-primary/30 glow-red"
+              ? "bg-gradient-glow border-primary/30"
               : "bg-card border-border"
           }`}
           style={{ boxShadow: "var(--shadow-card)" }}
@@ -61,7 +61,7 @@ const StatsCards = ({ drivers, totalRaces }: StatsCardsProps) => {
               className={`w-4 h-4 ${stat.highlight ? "text-primary" : "text-muted-foreground"}`}
             />
           </div>
-          <p className={`text-2xl font-bold font-racing ${stat.highlight ? "text-gradient-racing" : "text-foreground"}`}>
+          <p className={`break-words text-xl font-bold tracking-tight sm:text-2xl ${stat.highlight ? "text-primary" : "text-foreground"}`}>
             {stat.value}
           </p>
           <p className="text-xs text-muted-foreground mt-1">{stat.sub}</p>

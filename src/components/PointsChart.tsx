@@ -23,8 +23,8 @@ const PointsChart = ({ data, drivers, selectedDriver }: PointsChartProps) => {
       : drivers.filter((d) => d.id === selectedDriver);
 
   return (
-    <div className="rounded-xl border border-border bg-card p-5" style={{ boxShadow: "var(--shadow-card)" }}>
-      <h2 className="font-racing text-lg tracking-wide text-foreground mb-1">
+    <div className="min-w-0 rounded-2xl border border-border bg-card p-4 sm:p-5" style={{ boxShadow: "var(--shadow-card)" }}>
+      <h2 className="text-lg font-semibold tracking-tight text-foreground mb-1">
         Progressão de Pontos
       </h2>
       <p className="mb-4 text-xs text-muted-foreground">Evolução estimada até a pontuação oficial final da temporada</p>
@@ -36,13 +36,13 @@ const PointsChart = ({ data, drivers, selectedDriver }: PointsChartProps) => {
               dataKey="race"
               stroke="hsl(220 10% 55%)"
               fontSize={11}
-              fontFamily="Rajdhani"
+              fontFamily="Space Grotesk"
               tickLine={false}
             />
             <YAxis
               stroke="hsl(220 10% 55%)"
               fontSize={11}
-              fontFamily="Rajdhani"
+              fontFamily="Space Grotesk"
               tickLine={false}
             />
             <Tooltip
@@ -50,13 +50,13 @@ const PointsChart = ({ data, drivers, selectedDriver }: PointsChartProps) => {
                 backgroundColor: "hsl(220 18% 12%)",
                 border: "1px solid hsl(220 15% 18%)",
                 borderRadius: "8px",
-                fontFamily: "IBM Plex Sans",
+                fontFamily: "Inter",
                 fontSize: "12px",
                 color: "hsl(0 0% 95%)",
               }}
             />
             <Legend
-              wrapperStyle={{ fontFamily: "IBM Plex Sans", fontSize: "12px" }}
+              wrapperStyle={{ fontFamily: "Inter", fontSize: "12px" }}
             />
             {visibleDrivers.map((driver) => (
               <Line

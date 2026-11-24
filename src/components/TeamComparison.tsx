@@ -48,7 +48,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
 
   return (
     <div className="space-y-4">
-      <h2 className="font-racing text-lg tracking-wide text-foreground">
+      <h2 className="text-lg font-semibold tracking-tight text-foreground">
         Comparação de Equipes
       </h2>
 
@@ -57,7 +57,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
         {sorted.map((team, i) => (
           <div
             key={team.id}
-            className="rounded-xl border border-border bg-card p-4 relative overflow-hidden"
+            className="min-w-0 rounded-2xl border border-border bg-card p-4 relative overflow-hidden"
             style={{ boxShadow: "var(--shadow-card)" }}
           >
             {/* Position accent */}
@@ -112,7 +112,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
 
       {/* Points bar chart */}
       <div
-        className="rounded-xl border border-border bg-card p-5"
+        className="min-w-0 rounded-2xl border border-border bg-card p-5"
         style={{ boxShadow: "var(--shadow-card)" }}
       >
         <h3 className="font-racing text-sm tracking-wide text-foreground mb-4">
@@ -126,7 +126,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
                 type="number"
                 stroke="hsl(220 10% 55%)"
                 fontSize={11}
-                fontFamily="Rajdhani"
+                fontFamily="Space Grotesk"
                 tickLine={false}
               />
               <YAxis
@@ -134,7 +134,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
                 dataKey="name"
                 stroke="hsl(220 10% 55%)"
                 fontSize={11}
-                fontFamily="Rajdhani"
+                fontFamily="Space Grotesk"
                 tickLine={false}
                 width={90}
               />
@@ -143,7 +143,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
                   backgroundColor: "hsl(220 18% 12%)",
                   border: "1px solid hsl(220 15% 18%)",
                   borderRadius: "8px",
-                  fontFamily: "IBM Plex Sans",
+                  fontFamily: "Inter",
                   fontSize: "12px",
                   color: "hsl(0 0% 95%)",
                 }}
@@ -160,7 +160,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
 
       {/* Radar chart */}
       <div
-        className="rounded-xl border border-border bg-card p-5"
+        className="min-w-0 rounded-2xl border border-border bg-card p-5"
         style={{ boxShadow: "var(--shadow-card)" }}
       >
         <h3 className="font-racing text-sm tracking-wide text-foreground mb-1">
@@ -175,7 +175,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
               <PolarGrid stroke="hsl(220 15% 18%)" />
               <PolarAngleAxis
                 dataKey="metric"
-                tick={{ fill: "hsl(220 10% 65%)", fontSize: 11, fontFamily: "Rajdhani" }}
+                tick={{ fill: "hsl(220 10% 65%)", fontSize: 11, fontFamily: "Space Grotesk" }}
               />
               <PolarRadiusAxis
                 angle={90}
@@ -195,7 +195,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
                 />
               ))}
               <Legend
-                wrapperStyle={{ fontFamily: "Rajdhani", fontSize: "10px", paddingTop: "12px" }}
+                wrapperStyle={{ fontFamily: "Space Grotesk", fontSize: "10px", paddingTop: "12px" }}
                 formatter={(value) => (
                   <span style={{ color: "hsl(0 0% 80%)" }}>{value}</span>
                 )}
@@ -205,7 +205,7 @@ const TeamComparison = ({ teams }: TeamComparisonProps) => {
                   backgroundColor: "hsl(220 18% 12%)",
                   border: "1px solid hsl(220 15% 18%)",
                   borderRadius: "8px",
-                  fontFamily: "IBM Plex Sans",
+                  fontFamily: "Inter",
                   fontSize: "12px",
                   color: "hsl(0 0% 95%)",
                 }}

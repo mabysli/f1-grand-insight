@@ -12,24 +12,24 @@ const CircuitDetail = ({ circuits, selectedCircuit }: CircuitDetailProps) => {
 
   return (
     <div className="space-y-4">
-      <h2 className="font-racing text-lg tracking-wide text-foreground">
-        Detalhes dos Circuitos
+      <h2 className="text-2xl font-semibold tracking-tight text-foreground">
+        Circuitos da temporada
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {filtered.map((circuit) => (
           <div
             key={circuit.id}
-            className="rounded-lg border border-border bg-card overflow-hidden"
+            className="group min-w-0 overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-primary/50"
             style={{ boxShadow: "var(--shadow-card)" }}
           >
             {/* Track image */}
-            <div className="relative h-48 bg-secondary/50 flex items-center justify-center p-4">
+            <div className="track-panel relative flex h-48 items-center justify-center border-b border-border px-8 pb-3 pt-7">
               {circuit.trackPath && (
                 <svg
                   viewBox="0 0 240 160"
                   role="img"
                   aria-label={`Traçado de ${circuit.trackName ?? circuit.name}`}
-                  className="h-full w-full text-primary"
+                  className="h-full w-full text-primary transition-transform duration-300 motion-safe:group-hover:scale-105"
                 >
                   <path
                     d={circuit.trackPath}
@@ -50,7 +50,7 @@ const CircuitDetail = ({ circuits, selectedCircuit }: CircuitDetailProps) => {
 
             {/* Info */}
             <div className="p-4 space-y-3">
-              <h3 className="font-racing text-sm tracking-wide text-foreground">
+              <h3 className="text-base font-semibold text-foreground">
                 {circuit.name}
               </h3>
 

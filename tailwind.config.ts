@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        racing: ['Rajdhani', 'sans-serif'],
-        sans: ['IBM Plex Sans', 'sans-serif'],
+        racing: ['Space Grotesk', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

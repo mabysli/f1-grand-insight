@@ -159,13 +159,13 @@ const HeadToHead = ({ drivers, teams }: HeadToHeadProps) => {
 
   return (
     <div
-      className="rounded-xl border border-border bg-card p-5 space-y-5"
+      className="min-w-0 rounded-2xl border border-border bg-card p-5 space-y-5"
       style={{ boxShadow: "var(--shadow-card)" }}
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Swords className="h-5 w-5 text-primary" />
-          <h2 className="font-racing text-lg tracking-wide text-foreground">
+          <h2 className="text-lg font-semibold tracking-tight text-foreground">
             Confronto Direto
           </h2>
         </div>
@@ -300,7 +300,7 @@ const HeadToHead = ({ drivers, teams }: HeadToHeadProps) => {
                 <PolarGrid stroke="hsl(220 15% 18%)" />
                 <PolarAngleAxis
                   dataKey="metric"
-                  tick={{ fill: "hsl(220 10% 65%)", fontSize: 11, fontFamily: "Rajdhani" }}
+                  tick={{ fill: "hsl(220 10% 65%)", fontSize: 11, fontFamily: "Space Grotesk" }}
                 />
                 <PolarRadiusAxis
                   angle={90}
@@ -325,7 +325,7 @@ const HeadToHead = ({ drivers, teams }: HeadToHeadProps) => {
                   strokeWidth={2}
                 />
                 <Legend
-                  wrapperStyle={{ fontFamily: "Rajdhani", fontSize: "10px", paddingTop: "10px" }}
+                  wrapperStyle={{ fontFamily: "Space Grotesk", fontSize: "10px", paddingTop: "10px" }}
                   formatter={(v) => <span style={{ color: "hsl(0 0% 80%)" }}>{v}</span>}
                 />
                 <Tooltip
@@ -333,7 +333,7 @@ const HeadToHead = ({ drivers, teams }: HeadToHeadProps) => {
                     backgroundColor: "hsl(220 18% 12%)",
                     border: "1px solid hsl(220 15% 18%)",
                     borderRadius: "8px",
-                    fontFamily: "IBM Plex Sans",
+                    fontFamily: "Inter",
                     fontSize: "12px",
                     color: "hsl(0 0% 95%)",
                   }}
