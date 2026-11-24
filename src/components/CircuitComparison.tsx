@@ -21,9 +21,9 @@ const CircuitComparison = ({ circuits, selectedCircuit }: CircuitComparisonProps
       : circuits.filter((c) => c.id === selectedCircuit);
 
   const data = filtered.map((c) => ({
-    name: c.name.replace(" GP", ""),
+    name: c.name.replace(/^GP /, ""),
     voltas: c.laps,
-    comprimento: parseFloat(c.length.replace(" km", "")),
+    comprimento: c.lengthKm,
   }));
 
   return (
@@ -44,12 +44,13 @@ const CircuitComparison = ({ circuits, selectedCircuit }: CircuitComparisonProps
               textAnchor="end"
               height={60}
             />
-            <YAxis
+            <YAxis yAxisId="voltas" allowDecimals={false}
               stroke="hsl(220 10% 55%)"
               fontSize={11}
               fontFamily="Rajdhani"
               tickLine={false}
             />
+            <YAxis yAxisId="km" orientation="right" unit=" km" width={55} fontSize={11} />
             <Tooltip
               contentStyle={{
                 backgroundColor: "hsl(220 18% 12%)",
@@ -61,14 +62,14 @@ const CircuitComparison = ({ circuits, selectedCircuit }: CircuitComparisonProps
               }}
             />
             <Bar
-              dataKey="voltas"
-              name="Voltas"
+              yAxisId="voltas" dataKey="voltas"
+              name="Voltas completadas"
               fill="hsl(0 85% 50%)"
               radius={[4, 4, 0, 0]}
             />
             <Bar
-              dataKey="comprimento"
-              name="Comprimento (km)"
+              yAxisId="km" dataKey="comprimento"
+              name="Comprimento por volta (km)"
               fill="hsl(200 80% 55%)"
               radius={[4, 4, 0, 0]}
             />

@@ -7,17 +7,16 @@
  * o número de requisições reais à API paga.
  *
  * Endpoints usados (via proxy):
- *   endpoint=races             → GET /races?season={year}
  *   endpoint=rankings-drivers  → GET /rankings/drivers?season={year}
  *   endpoint=rankings-teams    → GET /rankings/teams?season={year}
  *
  * Observação de plano: o plano atual libera as temporadas 2022–2024.
- * Resultados corrida a corrida (volta a volta / posições finais) não estão
- * disponíveis no plano atual — `fetchRaceResults` retorna null.
+ * O calendário histórico e os traçados são fornecidos pelo catálogo local.
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import type { Driver, Team, Circuit, RaceResult, SeasonData } from "@/data/f1-data";
+import type { Driver, Team, Circuit, SeasonData } from "@/data/f1-data";
+import { getSeasonCircuits } from "@/data/season-circuits";
 
 // ── Team colors por NOME de equipe (matching por substring, case-insensitive) ─
 const TEAM_COLORS: Record<string, string> = {
@@ -60,7 +59,10 @@ async function proxyFetch<T>(endpoint: string, season: number): Promise<T[]> {
     body: { endpoint, season },
   });
   if (error) throw new Error(`f1-proxy: ${error.message}`);
-  return (data?.data ?? []) as T[];
+  if (data?.error || !Array.isArray(data?.data)) {
+    throw new Error("A classificação da temporada está indisponível.");
+  }
+  return data.data as T[];
 }
 
 // ── Tipos da api-sports.io ───────────────────────────────────────────────────
@@ -89,24 +91,11 @@ interface APITeamRanking {
   season: number;
 }
 
-interface APIRace {
-  id: number;
-  competition: { id: number; name: string; location: { country: string; city: string } };
-  circuit: { id: number; name: string; image?: string };
-  season: number;
-  type: string;
-  laps: { current: number | null; total: number | null };
-  fastest_lap?: { driver?: { id: number }; time: string | null } | null;
-  distance?: string | null;
-  date: string;
-  status: string;
-}
-
 // ── Fetchers + transformers ──────────────────────────────────────────────────
 
 export async function fetchDriverStandings(year: number): Promise<Driver[]> {
   const rows = await proxyFetch<APIDriverRanking>("rankings-drivers", year);
-  return rows.slice(0, 20).map((d) => ({
+  return rows.sort((a, b) => a.position - b.position).map((d) => ({
     id: (d.driver.abbr ?? String(d.driver.id)).toLowerCase(),
     name: d.driver.name,
     team: d.team?.name ?? "-",
@@ -134,40 +123,17 @@ export async function fetchConstructorStandings(year: number): Promise<Team[]> {
   }));
 }
 
-export async function fetchRaces(year: number): Promise<APIRace[]> {
-  const rows = await proxyFetch<APIRace>("races", year);
-  // A API retorna todas as sessões (treinos, quali, sprint...). Só a corrida.
-  return rows.filter((r) => (r.type ?? "").toLowerCase() === "race");
-}
-
-// Sem endpoint de resultados por corrida no plano atual.
-export async function fetchRaceResults(
-  _year: number,
-  _round: number
-): Promise<null> {
-  return null;
-}
-
-
 function buildPointsProgression(
   drivers: Driver[],
-  races: APIRace[]
-): { race: string; [driver: string]: number | string }[] {
-  const completedRaces = races.filter((race) =>
-    (race.status ?? "").toLowerCase().includes("completed")
-  );
-  const timeline = completedRaces.length > 0 ? completedRaces : races;
-  if (timeline.length === 0) return [];
-
-  return timeline.map((race, index) => {
-    const progress = (index + 1) / timeline.length;
-    const row: { race: string; [driver: string]: number | string } = {
-      race: (race.competition?.location?.country ?? race.competition?.name ?? `R${index + 1}`)
-        .slice(0, 3)
-        .toUpperCase(),
+  circuits: Circuit[],
+): SeasonData["pointsProgression"] {
+  return circuits.map((circuit, index) => {
+    const progress = (index + 1) / circuits.length;
+    const row: SeasonData["pointsProgression"][number] = {
+      race: circuit.name.replace(/^GP /, ""),
     };
     drivers.forEach((driver) => {
-      row[driver.id] = index === timeline.length - 1
+      row[driver.id] = index === circuits.length - 1
         ? driver.points
         : Math.round(driver.points * Math.pow(progress, 1.08));
     });
@@ -178,10 +144,9 @@ function buildPointsProgression(
 // ── Full season assembler ────────────────────────────────────────────────────
 
 export async function fetchSeasonData(year: number): Promise<SeasonData> {
-  const [drivers, teams, races] = await Promise.all([
+  const [drivers, teams] = await Promise.all([
     fetchDriverStandings(year),
     fetchConstructorStandings(year),
-    fetchRaces(year),
   ]);
 
   const enrichedTeams = teams.map((team) => ({
@@ -189,25 +154,14 @@ export async function fetchSeasonData(year: number): Promise<SeasonData> {
     drivers: drivers.filter((d) => d.team === team.name).map((d) => d.name),
   }));
 
-  const circuits: Circuit[] = races.map((r) => ({
-    id: slug(r.circuit?.name ?? r.competition?.name ?? String(r.id)),
-    name: r.competition?.name ?? r.circuit?.name ?? `Corrida ${r.id}`,
-    image: r.circuit?.image,
-    country: r.competition?.location?.country ?? "-",
-    laps: r.laps?.total ?? 0,
-    length: r.distance ?? "-",
-    fastestLap: r.fastest_lap?.time ?? "-",
-    sectors: [],
-  }));
-
-  const results: RaceResult[] = [];
-  const pointsProgression = buildPointsProgression(drivers, races);
+  const circuits = getSeasonCircuits(year);
+  const pointsProgression = buildPointsProgression(drivers, circuits);
 
   return {
     year,
     drivers,
     circuits,
-    results,
+    results: [],
     teams: enrichedTeams,
     pointsProgression,
     raceLaps: [],

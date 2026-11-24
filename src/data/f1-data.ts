@@ -20,7 +20,9 @@ export interface SectorTime {
 export interface Circuit {
   id: string;
   name: string;
-  image?: string;
+  trackName?: string;
+  trackPath?: string;
+  lengthKm?: number;
   country: string;
   laps: number;
   length: string;

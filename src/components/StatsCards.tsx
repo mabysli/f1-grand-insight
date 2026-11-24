@@ -9,13 +9,15 @@ interface StatsCardsProps {
 const StatsCards = ({ drivers, totalRaces }: StatsCardsProps) => {
   const leader = drivers[0];
   const totalWins = drivers.reduce((acc, d) => acc + d.wins, 0);
-  const avgPoints = Math.round(drivers.reduce((acc, d) => acc + d.points, 0) / drivers.length);
+  const avgPoints = drivers.length
+    ? Math.round(drivers.reduce((acc, d) => acc + d.points, 0) / drivers.length)
+    : "—";
 
   const stats = [
     {
       label: "Líder do Campeonato",
       value: leader?.name ?? "-",
-      sub: `${leader?.points} pts`,
+      sub: leader ? `${leader.points} pts` : "Sem classificação",
       icon: Trophy,
       highlight: true,
     },

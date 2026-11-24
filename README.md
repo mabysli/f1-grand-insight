@@ -71,3 +71,10 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Fontes do dashboard
+
+- Calendário histórico e voltas efetivamente completadas pelo vencedor: [resultados da Jolpica F1](https://api.jolpi.ca/ergast/f1/2024/results/1/), com dados de 2022 a 2024. As voltas mais rápidas vêm dos [resultados por ranking de volta](https://api.jolpi.ca/ergast/f1/2024/fastest/1/results/).
+- Comprimento da volta: fichas de circuito da [Fórmula 1](https://www.formula1.com/en/racing/2024) e [media kit da FIA](https://api.fia.com/sites/default/files/2024_japanesegp_mediakit_full.pdf).
+- Traçados: GeoJSON de [Tomislav Bacinger](https://github.com/bacinger/f1-circuits), projetado em linhas SVG. Consulte a [licença MIT dos dados](src/data/CIRCUIT-MAPS-LICENSE.md).
+- Classificações de pilotos e equipes: API-Sports por meio do proxy Supabase.

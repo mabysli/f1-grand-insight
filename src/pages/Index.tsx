@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import DashboardHeader from "@/components/DashboardHeader";
 import FilterBar from "@/components/FilterBar";
 import StatsCards from "@/components/StatsCards";
@@ -7,23 +7,18 @@ import PointsChart from "@/components/PointsChart";
 import CircuitComparison from "@/components/CircuitComparison";
 import CircuitDetail from "@/components/CircuitDetail";
 import TeamComparison from "@/components/TeamComparison";
-import RaceResults from "@/components/RaceResults";
-import RacePositionChart from "@/components/RacePositionChart";
 import HeadToHead from "@/components/HeadToHead";
 import { useF1Season, API_SEASONS } from "@/hooks/useF1Season";
-import { seasons as fallbackSeasons } from "@/data/f1-data";
+import { getSeasonCircuits } from "@/data/season-circuits";
 import { Loader2 } from "lucide-react";
 
 const Index = () => {
-  const [selectedSeason, setSelectedSeason] = useState(2024);
+  const [selectedSeason, setSelectedSeason] = useState(API_SEASONS[0]);
   const [selectedDriver, setSelectedDriver] = useState("all");
   const [selectedCircuit, setSelectedCircuit] = useState("all");
 
   const { data: season, isLoading, error } = useF1Season(selectedSeason);
-
-  // Fallback lap data from static file (API doesn't provide lap-by-lap)
-  const fallback = fallbackSeasons.find((s) => s.year === selectedSeason);
-  const raceLaps = fallback?.raceLaps ?? [];
+  const circuits = useMemo(() => getSeasonCircuits(selectedSeason), [selectedSeason]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -40,7 +35,7 @@ const Index = () => {
           drivers={season?.drivers ?? []}
           selectedDriver={selectedDriver}
           onDriverChange={setSelectedDriver}
-          circuits={season?.circuits ?? []}
+          circuits={circuits}
           selectedCircuit={selectedCircuit}
           onCircuitChange={setSelectedCircuit}
         />
@@ -49,7 +44,7 @@ const Index = () => {
           <div className="flex items-center justify-center py-20 gap-3">
             <Loader2 className="h-6 w-6 animate-spin text-primary" />
             <span className="font-racing text-sm text-muted-foreground tracking-widest">
-              CARREGANDO DADOS DA TEMPORADA {selectedSeason}...
+              CARREGANDO CLASSIFICAÇÕES DE {selectedSeason}...
             </span>
           </div>
         )}
@@ -57,7 +52,7 @@ const Index = () => {
         {error && (
           <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-6 text-center">
             <p className="font-racing text-sm text-destructive tracking-wider">
-              ERRO AO CARREGAR DADOS
+              ERRO AO CARREGAR CLASSIFICAÇÕES
             </p>
             <p className="text-xs text-muted-foreground mt-2">
               {(error as Error).message}
@@ -65,50 +60,30 @@ const Index = () => {
           </div>
         )}
 
-        {season && !isLoading && (
-          <>
-            <StatsCards drivers={season.drivers} totalRaces={season.circuits.length} />
+        {season && <StatsCards drivers={season.drivers} totalRaces={circuits.length} />}
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <PointsChart
-                data={season.pointsProgression}
-                drivers={season.drivers}
-                selectedDriver={selectedDriver}
-              />
-              <CircuitComparison
-                circuits={season.circuits}
-                selectedCircuit={selectedCircuit}
-              />
-            </div>
-
-            <CircuitDetail
-              circuits={season.circuits}
-              selectedCircuit={selectedCircuit}
+        <div className={season ? "grid grid-cols-1 gap-6 lg:grid-cols-2" : undefined}>
+          {season && (
+            <PointsChart
+              data={season.pointsProgression}
+              drivers={season.drivers}
+              selectedDriver={selectedDriver}
             />
+          )}
+          <CircuitComparison circuits={circuits} selectedCircuit={selectedCircuit} />
+        </div>
 
+        <CircuitDetail circuits={circuits} selectedCircuit={selectedCircuit} />
+
+        {season && (
+          <>
             <TeamComparison teams={season.teams} />
 
             <HeadToHead drivers={season.drivers} teams={season.teams} />
 
-
-            {raceLaps.length > 0 && (
-              <RacePositionChart
-                raceLaps={raceLaps}
-                drivers={season.drivers}
-              />
-            )}
-
             <DriverStandings
               drivers={season.drivers}
               selectedDriver={selectedDriver}
-            />
-
-            <RaceResults
-              results={season.results}
-              selectedCircuit={selectedCircuit}
-              selectedDriver={selectedDriver}
-              circuitNames={season.circuits.map((c) => ({ id: c.id, name: c.name }))}
-              drivers={season.drivers}
             />
           </>
         )}
@@ -116,7 +91,7 @@ const Index = () => {
 
       <footer className="border-t border-border py-6 mt-8">
         <p className="text-center text-xs text-muted-foreground font-racing tracking-widest">
-          F1 ANALYTICS DASHBOARD · DADOS VIA API-SPORTS.IO · {selectedSeason}
+          F1 ANALYTICS DASHBOARD · CLASSIFICAÇÕES VIA API-SPORTS · CALENDÁRIO VIA JOLPICA · {selectedSeason}
         </p>
       </footer>
     </div>

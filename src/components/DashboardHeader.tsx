@@ -18,8 +18,8 @@ const DashboardHeader = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-primary animate-pulse-slow" />
-          <span className="text-xs text-muted-foreground font-racing">LIVE DATA</span>
+          <div className="h-2 w-2 rounded-full bg-primary" />
+          <span className="text-xs text-muted-foreground font-racing">DADOS HISTÓRICOS</span>
         </div>
       </div>
     </header>
