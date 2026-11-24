@@ -5,6 +5,7 @@ import StatsCards from "@/components/StatsCards";
 import DriverStandings from "@/components/DriverStandings";
 import PointsChart from "@/components/PointsChart";
 import CircuitComparison from "@/components/CircuitComparison";
+import RacePaceChart from "@/components/RacePaceChart";
 import CircuitDetail from "@/components/CircuitDetail";
 import TeamComparison from "@/components/TeamComparison";
 import HeadToHead from "@/components/HeadToHead";
@@ -18,7 +19,8 @@ const Index = () => {
   const [selectedCircuit, setSelectedCircuit] = useState("all");
 
   const { data: season, isLoading } = useF1Season(selectedSeason);
-  const circuits = useMemo(() => getSeasonCircuits(selectedSeason), [selectedSeason]);
+  const localCircuits = useMemo(() => getSeasonCircuits(selectedSeason), [selectedSeason]);
+  const circuits = season?.circuits ?? localCircuits;
 
   const featuredCircuit = circuits.find((circuit) => circuit.id === selectedCircuit) ?? circuits[0];
 
@@ -35,7 +37,7 @@ const Index = () => {
               Fórmula 1 em dados
             </h1>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
-              Explore os {circuits.length} Grandes Prêmios da temporada e compare circuitos, pilotos e equipes.
+              Compare circuitos, pilotos e equipes da temporada.
             </p>
             <a href="#circuitos" className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/85">
               Explorar circuitos
@@ -71,10 +73,16 @@ const Index = () => {
           onCircuitChange={setSelectedCircuit}
         />
 
-        {season && <StatsCards drivers={season.drivers} totalRaces={circuits.length} />}
+        {season?.snapshotDate && (
+          <p role="status" className="text-xs text-muted-foreground">
+            Dados da última verificação em {new Date(`${season.snapshotDate}T12:00:00Z`).toLocaleDateString("pt-BR", { timeZone: "UTC" })}.
+          </p>
+        )}
 
-        <div className={season ? "grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-2" : "min-w-0"}>
-          {season && (
+        {season && <StatsCards drivers={season.drivers} totalRaces={circuits.filter((circuit) => circuit.completed ?? circuit.laps > 0).length} />}
+
+        <div className={season?.pointsProgression.length ? "grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-2" : "min-w-0"}>
+          {Boolean(season?.pointsProgression.length) && (
             <PointsChart
               data={season.pointsProgression}
               drivers={season.drivers}
@@ -84,6 +92,14 @@ const Index = () => {
           <CircuitComparison circuits={circuits} selectedCircuit={selectedCircuit} />
         </div>
 
+        {season?.detailedResults === false && (
+          <p role="status" className="text-sm text-muted-foreground">Resultados completos temporariamente indisponíveis. A classificação publicada continua visível.</p>
+        )}
+
+        {selectedCircuit !== "all" && selectedSeason >= 2023 && featuredCircuit?.date && featuredCircuit.winnerNumber != null && (
+          <RacePaceChart year={selectedSeason} date={featuredCircuit.date} driverNumber={featuredCircuit.winnerNumber} />
+        )}
+
         <section id="circuitos" aria-label="Circuitos da temporada">
           <CircuitDetail circuits={circuits} selectedCircuit={selectedCircuit} />
         </section>
@@ -91,10 +107,9 @@ const Index = () => {
         <section id="classificacoes" aria-label="Classificações" className="space-y-7">
           {season && (
             <>
-              <TeamComparison teams={season.teams} />
-
-              <HeadToHead drivers={season.drivers} teams={season.teams} />
-              <DriverStandings drivers={season.drivers} selectedDriver={selectedDriver} />
+              <TeamComparison teams={season.teams} showRaceStats={season.detailedResults} />
+              {season.detailedResults && <HeadToHead drivers={season.drivers} teams={season.teams} />}
+              <DriverStandings drivers={season.drivers} selectedDriver={selectedDriver} showRaceStats={season.detailedResults} />
             </>
           )}
           {!season && (
@@ -107,7 +122,7 @@ const Index = () => {
 
       <footer className="border-t border-border py-6 mt-8">
         <p className="px-4 text-center font-mono text-xs text-muted-foreground">
-          F1 ANALYTICS DASHBOARD · CLASSIFICAÇÕES VIA API-SPORTS · CALENDÁRIO VIA JOLPICA · {selectedSeason}
+          F1 ANALYTICS DASHBOARD · JOLPICA F1 · OPENF1 · {selectedSeason}
         </p>
       </footer>
     </div>

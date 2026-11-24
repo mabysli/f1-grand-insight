@@ -11,9 +11,10 @@ import { type Driver } from "@/data/f1-data";
 interface DriverStandingsProps {
   drivers: Driver[];
   selectedDriver: string;
+  showRaceStats?: boolean;
 }
 
-const DriverStandings = ({ drivers, selectedDriver }: DriverStandingsProps) => {
+const DriverStandings = ({ drivers, selectedDriver, showRaceStats = true }: DriverStandingsProps) => {
   const filtered =
     selectedDriver === "all"
       ? drivers
@@ -75,8 +76,8 @@ const DriverStandings = ({ drivers, selectedDriver }: DriverStandingsProps) => {
                     {driver.points}
                   </TableCell>
                   <TableCell className="text-right text-sm text-secondary-foreground">{driver.wins}</TableCell>
-                  <TableCell className="text-right text-sm text-secondary-foreground">{driver.podiums}</TableCell>
-                  <TableCell className="text-right text-sm font-mono text-f1-cyan">{driver.bestLap}</TableCell>
+                  <TableCell className="text-right text-sm text-secondary-foreground">{showRaceStats ? driver.podiums : "—"}</TableCell>
+                  <TableCell className="text-right text-sm font-mono text-f1-cyan">{showRaceStats ? driver.bestLap : "—"}</TableCell>
                 </TableRow>
               );
             })}

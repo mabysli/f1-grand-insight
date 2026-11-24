@@ -27,13 +27,14 @@ const PointsChart = ({ data, drivers, selectedDriver }: PointsChartProps) => {
       <h2 className="text-lg font-semibold tracking-tight text-foreground mb-1">
         Progressão de Pontos
       </h2>
-      <p className="mb-4 text-xs text-muted-foreground">Evolução estimada até a pontuação oficial final da temporada</p>
+      <p className="mb-4 text-xs text-muted-foreground">Pontos acumulados nas corridas e sprints · até 6 pilotos quando nenhum filtro é selecionado</p>
       <div className="h-[320px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(220 15% 18%)" />
+            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="hsl(220 15% 18%)" />
             <XAxis
-              dataKey="race"
+              dataKey="round"
+              tickFormatter={(round) => `R${round}`}
               stroke="hsl(220 10% 55%)"
               fontSize={11}
               fontFamily="Space Grotesk"
@@ -46,6 +47,8 @@ const PointsChart = ({ data, drivers, selectedDriver }: PointsChartProps) => {
               tickLine={false}
             />
             <Tooltip
+              labelFormatter={(_, entries) => entries[0]?.payload?.race ?? ""}
+              formatter={(points, name) => [`${points} pts`, name]}
               contentStyle={{
                 backgroundColor: "hsl(220 18% 12%)",
                 border: "1px solid hsl(220 15% 18%)",
@@ -58,15 +61,16 @@ const PointsChart = ({ data, drivers, selectedDriver }: PointsChartProps) => {
             <Legend
               wrapperStyle={{ fontFamily: "Inter", fontSize: "12px" }}
             />
-            {visibleDrivers.map((driver) => (
+            {visibleDrivers.map((driver, index) => (
               <Line
                 key={driver.id}
-                type="monotone"
+                type="linear"
                 dataKey={driver.id}
                 name={driver.name}
                 stroke={driver.teamColor}
                 strokeWidth={2.5}
-                dot={{ r: 3, fill: driver.teamColor }}
+                dot={false}
+                strokeDasharray={index % 2 ? "6 3" : undefined}
                 activeDot={{ r: 5 }}
               />
             ))}

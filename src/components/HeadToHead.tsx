@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -6,16 +6,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  Radar,
-  Legend,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { Users, Swords } from "lucide-react";
 import type { Driver, Team } from "@/data/f1-data";
 
@@ -97,52 +87,6 @@ const HeadToHead = ({ drivers, teams }: HeadToHeadProps) => {
     mode === "drivers"
       ? (entityB as Driver | undefined)?.teamColor ?? "#00d2be"
       : (entityB as Team | undefined)?.color ?? "#00d2be";
-
-  const radarData = useMemo(() => {
-    if (!entityA || !entityB) return [];
-    if (mode === "drivers") {
-      const a = entityA as Driver;
-      const b = entityB as Driver;
-      const maxPts = Math.max(a.points, b.points, 1);
-      const maxWins = Math.max(a.wins, b.wins, 1);
-      const maxPod = Math.max(a.podiums, b.podiums, 1);
-      return [
-        { metric: "Pontos", A: (a.points / maxPts) * 100, B: (b.points / maxPts) * 100 },
-        { metric: "Vitórias", A: (a.wins / maxWins) * 100, B: (b.wins / maxWins) * 100 },
-        { metric: "Pódios", A: (a.podiums / maxPod) * 100, B: (b.podiums / maxPod) * 100 },
-        {
-          metric: "Consistência",
-          A: a.podiums > 0 ? Math.min(100, (a.podiums / Math.max(a.wins, 1)) * 40) : 20,
-          B: b.podiums > 0 ? Math.min(100, (b.podiums / Math.max(b.wins, 1)) * 40) : 20,
-        },
-        {
-          metric: "Aproveitamento",
-          A: Math.min(100, (a.points / Math.max(maxPts, 1)) * 100),
-          B: Math.min(100, (b.points / Math.max(maxPts, 1)) * 100),
-        },
-      ];
-    }
-    const a = entityA as Team;
-    const b = entityB as Team;
-    const maxPts = Math.max(a.points, b.points, 1);
-    const maxWins = Math.max(a.wins, b.wins, 1);
-    const maxPod = Math.max(a.podiums, b.podiums, 1);
-    return [
-      { metric: "Pontos", A: (a.points / maxPts) * 100, B: (b.points / maxPts) * 100 },
-      { metric: "Vitórias", A: (a.wins / maxWins) * 100, B: (b.wins / maxWins) * 100 },
-      { metric: "Pódios", A: (a.podiums / maxPod) * 100, B: (b.podiums / maxPod) * 100 },
-      {
-        metric: "Chegada Média",
-        A: Math.max(0, 100 - a.avgFinish * 8),
-        B: Math.max(0, 100 - b.avgFinish * 8),
-      },
-      {
-        metric: "Confiabilidade",
-        A: Math.min(100, (a.podiums / Math.max(a.wins || 1, 1)) * 40 + 40),
-        B: Math.min(100, (b.podiums / Math.max(b.wins || 1, 1)) * 40 + 40),
-      },
-    ];
-  }, [entityA, entityB, mode]);
 
   if (list.length < 2) return null;
 
@@ -293,55 +237,6 @@ const HeadToHead = ({ drivers, teams }: HeadToHeadProps) => {
             )}
           </div>
 
-          {/* Radar */}
-          <div className="h-[320px] pt-2">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart data={radarData} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
-                <PolarGrid stroke="hsl(220 15% 18%)" />
-                <PolarAngleAxis
-                  dataKey="metric"
-                  tick={{ fill: "hsl(220 10% 65%)", fontSize: 11, fontFamily: "Space Grotesk" }}
-                />
-                <PolarRadiusAxis
-                  angle={90}
-                  domain={[0, 100]}
-                  tick={{ fill: "hsl(220 10% 45%)", fontSize: 9 }}
-                  tickCount={4}
-                />
-                <Radar
-                  name={nameA}
-                  dataKey="A"
-                  stroke={colorA}
-                  fill={colorA}
-                  fillOpacity={0.2}
-                  strokeWidth={2}
-                />
-                <Radar
-                  name={nameB}
-                  dataKey="B"
-                  stroke={colorB}
-                  fill={colorB}
-                  fillOpacity={0.2}
-                  strokeWidth={2}
-                />
-                <Legend
-                  wrapperStyle={{ fontFamily: "Space Grotesk", fontSize: "10px", paddingTop: "10px" }}
-                  formatter={(v) => <span style={{ color: "hsl(0 0% 80%)" }}>{v}</span>}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(220 18% 12%)",
-                    border: "1px solid hsl(220 15% 18%)",
-                    borderRadius: "8px",
-                    fontFamily: "Inter",
-                    fontSize: "12px",
-                    color: "hsl(0 0% 95%)",
-                  }}
-                  formatter={(v: number) => `${v.toFixed(0)}%`}
-                />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
         </>
       )}
     </div>

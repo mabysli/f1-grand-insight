@@ -21,6 +21,9 @@ export interface Circuit {
   id: string;
   name: string;
   trackName?: string;
+  date?: string;
+  winnerNumber?: number;
+  completed?: boolean;
   trackPath?: string;
   lengthKm?: number;
   country: string;
@@ -51,6 +54,8 @@ export interface RaceResult {
 }
 
 export interface SeasonData {
+  detailedResults?: boolean;
+  snapshotDate?: string;
   year: number;
   drivers: Driver[];
   circuits: Circuit[];

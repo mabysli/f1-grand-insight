@@ -77,4 +77,7 @@ Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/c
 - Calendário histórico e voltas efetivamente completadas pelo vencedor: [resultados da Jolpica F1](https://api.jolpi.ca/ergast/f1/2024/results/1/), com dados de 2022 a 2024. As voltas mais rápidas vêm dos [resultados por ranking de volta](https://api.jolpi.ca/ergast/f1/2024/fastest/1/results/).
 - Comprimento da volta: fichas de circuito da [Fórmula 1](https://www.formula1.com/en/racing/2024) e [media kit da FIA](https://api.fia.com/sites/default/files/2024_japanesegp_mediakit_full.pdf).
 - Traçados: GeoJSON de [Tomislav Bacinger](https://github.com/bacinger/f1-circuits), projetado em linhas SVG. Consulte a [licença MIT dos dados](src/data/CIRCUIT-MAPS-LICENSE.md).
-- Classificações de pilotos e equipes: API-Sports por meio do proxy Supabase.
+- Calendário, resultados de corrida e sprint, e classificações de pilotos e equipes de 2022 a 2026: [Jolpica F1](https://api.jolpi.ca/docs/). A evolução soma os pontos recebidos por etapa. As tabelas usam a classificação publicada pela API.
+- Tempos por volta do vencedor ao selecionar um circuito, de 2023 em diante: [OpenF1](https://openf1.org/docs/).
+
+O painel inclui uma cópia de segurança de 2026 verificada em 24/11/2026, até o GP de Las Vegas. A pontuação da sprint de Singapura nessa cópia foi conferida na [classificação oficial da Fórmula 1](https://www.formula1.com/en/results/2026/races/1296/singapore/sprint-results).

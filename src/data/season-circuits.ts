@@ -12,9 +12,14 @@ const lengthFormat = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 3,
 });
 
+export function getCircuitTrack(id: string, year: number) {
+  const track = tracks[`${id}_${year}`] ?? tracks[id];
+  return track && { ...track, length: `${lengthFormat.format(track.lengthKm)} km` };
+}
+
 export function getSeasonCircuits(year: number): Circuit[] {
   return (seasons[year] ?? []).map((race) => {
-    const track = tracks[`${race.id}_${year}`] ?? tracks[race.id];
+    const track = getCircuitTrack(race.id, year);
     return {
       id: race.id,
       name: race.name,
@@ -23,7 +28,7 @@ export function getSeasonCircuits(year: number): Circuit[] {
       trackPath: track.path,
       country: track.country,
       lengthKm: track.lengthKm,
-      length: `${lengthFormat.format(track.lengthKm)} km`,
+      length: track.length,
       fastestLap: race.fastestLap ?? "-",
       sectors: [],
     };

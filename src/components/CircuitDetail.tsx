@@ -58,11 +58,11 @@ const CircuitDetail = ({ circuits, selectedCircuit }: CircuitDetailProps) => {
               <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <MapPin aria-hidden="true" className="h-3 w-3" />
-                  {circuit.length} por volta
+                  {circuit.lengthKm ? `${circuit.length} por volta` : "Extensão indisponível"}
                 </span>
                 <span className="flex items-center gap-1">
                   <Gauge aria-hidden="true" className="h-3 w-3" />
-                  {circuit.laps} voltas completadas
+                  {circuit.laps ? `${circuit.laps} voltas completadas` : circuit.completed ? "Voltas indisponíveis" : "Aguardando resultado"}
                 </span>
                 {circuit.fastestLap !== "-" && (
                   <span className="flex items-center gap-1">
